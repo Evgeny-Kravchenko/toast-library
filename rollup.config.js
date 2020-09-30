@@ -1,22 +1,42 @@
-import babel from 'rollup-plugin-babel';
-import commonjs from 'rollup-plugin-commonjs';
+import peerDepsExternal from 'rollup-plugin-peer-deps-external';
 import nodeResolve from 'rollup-plugin-node-resolve';
-import replace from 'rollup-plugin-replace';
-import uglify from 'rollup-plugin-uglify';
+import commonjs from 'rollup-plugin-commonjs';
+import babel from 'rollup-plugin-babel';
+import { terser } from 'rollup-plugin-terser';
 
-const env = process.env.NODE_ENV;
+import packageData from './package.json';
 
 export default {
-  input: 'src/index.jsx',
-  output: 'dist/bundle.js',
-  format: 'iife',
+  input: 'src/index.js',
+  output: [
+    {
+      file: packageData.main,
+      format: 'cjs',
+      sourcemap: true,
+    },
+    {
+      file: packageData.module,
+      format: 'esm',
+      sourcemap: true,
+    },
+  ],
   plugins: [
-    nodeResolve(),
-    replace({ 'process.env.NODE_ENV': JSON.stringify(env) }),
-    commonjs(),
-    babel({
-      exclude: 'node_modules/**',
+    peerDepsExternal(),
+    nodeResolve({
+      extensions: ['.js', '.jsx', '.json'],
     }),
-    env === 'production' && uglify(),
+    babel({
+      presets: ['react-app'],
+      plugins: [
+        '@babel/plugin-proposal-class-properties',
+        '@babel/plugin-proposal-object-rest-spread',
+        '@babel/plugin-proposal-optional-chaining',
+        '@babel/plugin-syntax-dynamic-import',
+      ],
+      exclude: 'node_modules/**',
+      runtimeHelpers: true,
+    }),
+    commonjs(),
+    terser(),
   ],
 };
