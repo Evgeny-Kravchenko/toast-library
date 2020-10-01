@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 const Image = styled.svg`
-  fill: ${(props) => (props.theme === 'primary' ? '#000000' : '#ffffff')};
+  fill: ${(props) => props.theme.color};
   width: 30px;
   height: 30px;
 `;

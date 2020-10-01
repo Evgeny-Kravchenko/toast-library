@@ -4,14 +4,12 @@ import propTypes from 'prop-types';
 
 import ImageType from '../ImageType';
 
-const DEFAULT_COLOR = '#3ee59b';
-
 const ToastWrapper = styled.div`
   width: 400px;
   padding: 20px;
-  background-color: ${DEFAULT_COLOR};
+  background-color: ${(props) => props.theme.backgroundColor};
   border-radius: 3%;
-  color: ${(props) => (props.theme === 'primary' ? '#000000' : '#ffffff')};
+  color: ${(props) => props.theme.color};
 `;
 
 const ToastHeader = styled.header`
@@ -34,7 +32,7 @@ const CloseButton = styled.button`
   transition: 0.2s;
 
   svg {
-    fill: ${(props) => (props.theme === 'primary' ? '#000000' : '#ffffff')};
+    fill: ${(props) => props.theme.color};
   }
 
   &:hover {
@@ -72,7 +70,7 @@ const TestComponent = ({ theme }) => (
 );
 
 TestComponent.propTypes = {
-  theme: propTypes.string.isRequired,
+  theme: propTypes.shape({ backgrondColor: propTypes.string, color: propTypes.string }).isRequired,
 };
 
 export default TestComponent;
