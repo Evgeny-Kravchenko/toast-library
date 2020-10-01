@@ -1,0 +1,4 @@
+const animations = {
+  appearance: '',
+  disappearance: '',
+};

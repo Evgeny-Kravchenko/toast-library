@@ -7,7 +7,7 @@ import {
   ERROR_BACKGROUND_COLOR,
   SUCCESS_TEXT_COLOR,
   SUCCESS_BACKGROUND_COLOR,
-} from '../constants';
+} from './constants';
 
 export const infoTheme = {
   backgroundColor: INFO_BACKGROUND_COLOR,
