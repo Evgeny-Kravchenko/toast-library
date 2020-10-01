@@ -1,3 +1,8 @@
+import React from 'react';
+import { createPortal } from 'react-dom';
+import TestComponent from '../components/TestComponent/TestComponent';
+import { errorTheme } from '../default-themes';
+
 export default class Toasts {
   static _instance = null;
   countOfShowedToasts = null;
@@ -11,6 +16,7 @@ export default class Toasts {
   paddingY;
   colorBackground;
   animationName;
+  container;
 
   constructor() {
     if (Toasts._instance) {
@@ -61,7 +67,12 @@ export default class Toasts {
     return this;
   }
 
+  setContainer(container) {
+    this.container = container;
+    return this;
+  }
+
   show() {
-    console.log(this);
+    //??????
   }
 }
