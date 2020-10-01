@@ -1,12 +1,28 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const ToastWrapper = styled.div`
-  display: ${(props) => (props.isShown ? 'block' : 'none')};
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
   width: 400px;
   padding: 20px;
   background-color: ${(props) => props.theme.backgroundColor};
   border-radius: 3%;
   color: ${(props) => props.theme.color};
+  animation: ${(props) => props.animation} 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+
+  @keyframes swing-in-top-fwd {
+    0% {
+      transform: rotateX(-100deg);
+      transform-origin: top;
+      opacity: 0;
+    }
+    100% {
+      transform: rotateX(0deg);
+      transform-origin: top;
+      opacity: 1;
+    }
+  }
 `;
 
 export const ToastHeader = styled.header`

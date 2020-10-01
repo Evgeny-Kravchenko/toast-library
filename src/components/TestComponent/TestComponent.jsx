@@ -11,10 +11,11 @@ import {
   ToastHeader,
 } from './styled-components';
 
-const TestComponent = ({ theme }) => {
+const TestComponent = ({ theme, animations }) => {
   const [isShown, setIsShown] = useState(true);
+  const currentAnimation = !isShown ? animations.disappearance : animations.appearance;
   return (
-    <ToastWrapper theme={theme} isShown={isShown}>
+    <ToastWrapper theme={theme} isShown={isShown} animation={currentAnimation}>
       <ToastHeader>
         <Title>Test component!</Title>
         <CloseButton
@@ -38,6 +39,7 @@ const TestComponent = ({ theme }) => {
 
 TestComponent.propTypes = {
   theme: propTypes.shape({ backgrondColor: propTypes.string, color: propTypes.string }).isRequired,
+  animations: propTypes.any,
 };
 
 export default TestComponent;
