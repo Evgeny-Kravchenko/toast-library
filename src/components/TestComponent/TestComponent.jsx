@@ -11,7 +11,7 @@ import {
   ToastHeader,
 } from './styled-components';
 
-const TestComponent = ({ theme, animations }) => {
+const TestComponent = ({ theme, animations, type }) => {
   const [isShown, setIsShown] = useState(true);
   const currentAnimation = !isShown ? animations.disappearance : animations.appearance;
   return (
@@ -30,7 +30,7 @@ const TestComponent = ({ theme, animations }) => {
         </CloseButton>
       </ToastHeader>
       <ToastBody>
-        <ImageType theme={theme} />
+        <ImageType theme={theme} type={type} />
         <ToastDescription>This is the test component to check how it works.</ToastDescription>
       </ToastBody>
     </ToastWrapper>

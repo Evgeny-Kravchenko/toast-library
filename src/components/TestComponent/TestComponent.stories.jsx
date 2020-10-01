@@ -10,17 +10,17 @@ export default {
 };
 
 export const Info = () => (
-  <TestComponent theme={object('Style', infoTheme)} animations={animations} />
+  <TestComponent theme={object('Style', infoTheme)} animations={animations} type="info" />
 );
 
 export const Warning = () => (
-  <TestComponent theme={object('Style', warningTheme)} animations={animations} />
+  <TestComponent theme={object('Style', warningTheme)} animations={animations} type="warning" />
 );
 
 export const Error = () => (
-  <TestComponent theme={object('Style', errorTheme)} animations={animations} />
+  <TestComponent theme={object('Style', errorTheme)} animations={animations} type="error" />
 );
 
 export const Success = () => (
-  <TestComponent theme={object('Style', successTheme)} animations={animations} />
+  <TestComponent theme={object('Style', successTheme)} animations={animations} type="success" />
 );

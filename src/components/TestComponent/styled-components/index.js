@@ -58,7 +58,7 @@ export const ToastBody = styled.div`
   justify-content: space-around;
   align-items: center;
   width: 100%;
-  padding: 10px;
+  padding-top: 10px;
 `;
 
 export const ToastDescription = styled.p`
