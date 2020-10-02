@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef } from 'react';
+import React, { useLayoutEffect, useRef, useState } from 'react';
 import { infoTheme } from '../../default-themes';
 
 import Toast from '../Toast';
@@ -12,7 +12,13 @@ const ToastContainer = () => {
   useLayoutEffect(() => {
     toastManager = new Toasts(toastRef);
   });
-  return <Toast ref={toastRef} animations={animations} theme={infoTheme} />;
+  return (
+    <Toast
+      ref={toastRef}
+      animations={animations}
+      theme={infoTheme}
+    />
+  );
 };
 
 export { ToastContainer, toastManager };

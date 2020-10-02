@@ -71,7 +71,6 @@ export default class Toasts {
     const indentX = this.indentX;
     const indentY = this.indentY;
     const indents = { indentX, indentY };
-
     this.refToastContainer.current.show({
       type,
       backgroundColor,
