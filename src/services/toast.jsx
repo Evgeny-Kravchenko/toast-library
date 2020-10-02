@@ -2,18 +2,10 @@ import React from 'react';
 
 export default class Toasts {
   static _instance = null;
-  countOfShowedToasts = null;
-  positionX;
-  positionY;
   type;
-  durationOfShowing;
   title;
   description;
-  paddingX;
-  paddingY;
-  colorBackground;
-  animationName;
-  container;
+  backgroundColor;
   refToastContainer;
 
   constructor(refToastContainer) {
@@ -24,19 +16,8 @@ export default class Toasts {
     Toasts._instance = this;
   }
 
-  setPosition(x, y) {
-    this.positionX = x;
-    this.positionY = y;
-    return this;
-  }
-
   setType(type) {
     this.type = type;
-    return this;
-  }
-
-  setDurationOfShowing(ms) {
-    this.durationOfShowing = ms;
     return this;
   }
 
@@ -50,29 +31,17 @@ export default class Toasts {
     return this;
   }
 
-  setPadding(x, y) {
-    this.paddingX = x;
-    this.paddingY = y;
-    return this;
-  }
-
   setColorOfBackground(color) {
-    this.colorBackground = color;
-    return this;
-  }
-
-  setAnimationOfShowingAndHidden(animation) {
-    this.animationName = animation;
-    return this;
-  }
-
-  setContainer(container) {
-    this.container = container;
+    this.backgroundColor = color;
     return this;
   }
 
   show() {
-    this.refToastContainer.current.show();
+    const type = this.type;
+    const title = this.title;
+    const description = this.description;
+    const backgroundColor = this.backgroundColor;
+    this.refToastContainer.current.show({ type, backgroundColor, title, description });
   }
 
   hide() {

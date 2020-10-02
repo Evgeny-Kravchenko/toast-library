@@ -4,10 +4,10 @@ import { successTheme, errorTheme, warningTheme, infoTheme } from '../../default
 import { withKnobs, object, text } from '@storybook/addon-knobs';
 import animations from '../../animations';
 
-export default {
-  title: 'Toast',
-  decorators: [withKnobs],
-};
+// export default {
+//   title: 'Toast',
+//   decorators: [withKnobs],
+// };
 
 export const Info = () => (
   <Toast

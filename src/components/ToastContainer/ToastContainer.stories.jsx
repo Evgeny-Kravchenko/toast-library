@@ -10,7 +10,12 @@ export default {
 
 export const Sandbox = () => {
   const onShow = () => {
-    toastManager.show();
+    toastManager
+      .setType('info')
+      .setTitle('Info component')
+      .setColorOfBackground('orange')
+      .setDescription('Here is the custom description')
+      .show();
   };
   const onHide = () => {
     toastManager.hide();

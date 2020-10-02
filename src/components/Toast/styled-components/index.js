@@ -6,7 +6,7 @@ export const ToastWrapper = styled.div`
   right: 20px;
   width: 400px;
   padding: 20px;
-  background-color: ${(props) => props.theme.backgroundColor};
+  background-color: ${(props) => props.backgroundColor || props.theme.backgroundColor};
   border-radius: 3%;
   color: ${(props) => props.theme.color};
   animation: ${(props) => props.animation} 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
