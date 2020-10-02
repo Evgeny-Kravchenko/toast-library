@@ -1,7 +1,4 @@
 import React from 'react';
-import { createPortal } from 'react-dom';
-import TestComponent from '../components/TestComponent/TestComponent';
-import { errorTheme } from '../default-themes';
 
 export default class Toasts {
   static _instance = null;
@@ -17,11 +14,13 @@ export default class Toasts {
   colorBackground;
   animationName;
   container;
+  refToastContainer;
 
-  constructor() {
+  constructor(refToastContainer) {
     if (Toasts._instance) {
       return Toasts._instance;
     }
+    this.refToastContainer = refToastContainer;
     Toasts._instance = this;
   }
 
@@ -72,7 +71,15 @@ export default class Toasts {
     return this;
   }
 
+  setRef(ref) {
+    this.refToastContainer = ref;
+  }
+
   show() {
-    //??????
+    this.refToastContainer.current.show();
+  }
+
+  hide() {
+    this.refToastContainer.current.hide();
   }
 }
