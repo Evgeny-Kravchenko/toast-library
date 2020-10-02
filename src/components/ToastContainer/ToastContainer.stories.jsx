@@ -1,9 +1,7 @@
 import React from 'react';
 import { withKnobs } from '@storybook/addon-knobs';
-import ToastContainer from './ToastContainer';
-import Toast from '../../services';
 
-const toast = new Toast();
+import { ToastContainer, toastManager } from './ToastContainer';
 
 export default {
   title: 'Sandbox',
@@ -12,10 +10,10 @@ export default {
 
 export const Sandbox = () => {
   const onShow = () => {
-    toast.show();
+    toastManager.show();
   };
   const onHide = () => {
-    toast.hide();
+    toastManager.hide();
   };
   return (
     <>

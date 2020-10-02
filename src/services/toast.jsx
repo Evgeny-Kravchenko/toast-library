@@ -71,10 +71,6 @@ export default class Toasts {
     return this;
   }
 
-  setRef(ref) {
-    this.refToastContainer = ref;
-  }
-
   show() {
     this.refToastContainer.current.show();
   }
