@@ -16,7 +16,7 @@ export const Sandbox = () => {
       .setColorOfBackground('orange')
       .setDescription('Here is the custom description')
       .setPosition('bottom', 'left')
-      .setShowingDuration(1000)
+      .setShowingDuration(2000)
       .setIndent(25, 25)
       .show();
   };
