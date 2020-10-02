@@ -18,6 +18,7 @@ export const Sandbox = () => {
       .setPosition('bottom', 'left')
       .setShowingDuration(2000)
       .setIndent(25, 25)
+      .setAnimation('puff')
       .show();
   };
   const onHide = () => {

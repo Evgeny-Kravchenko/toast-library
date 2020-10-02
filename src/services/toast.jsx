@@ -1,4 +1,5 @@
 import React from 'react';
+import animations from '../animations';
 
 export default class Toasts {
   static _instance = null;
@@ -13,6 +14,7 @@ export default class Toasts {
   showingDuration = null;
   indentX = null;
   indentY = null;
+  animation = null;
 
   constructor(refToastContainer) {
     if (Toasts._instance) {
@@ -59,6 +61,13 @@ export default class Toasts {
     return this;
   }
 
+  setAnimation(animationName) {
+    if (animations.hasOwnProperty(animationName)) {
+      this.animation = animations[animationName];
+    }
+    return this;
+  }
+
   show() {
     const type = this.type;
     const title = this.title;
@@ -71,6 +80,7 @@ export default class Toasts {
     const indentX = this.indentX;
     const indentY = this.indentY;
     const indents = { indentX, indentY };
+    const animation = this.animation;
     this.refToastContainer.current.show({
       type,
       backgroundColor,
@@ -79,6 +89,7 @@ export default class Toasts {
       position,
       showingDuration,
       indents,
+      animation,
     });
   }
 

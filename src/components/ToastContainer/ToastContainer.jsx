@@ -1,8 +1,7 @@
-import React, { useLayoutEffect, useRef, useState } from 'react';
+import React, { useLayoutEffect, useRef } from 'react';
 import { infoTheme } from '../../default-themes';
 
 import Toast from '../Toast';
-import animations from '../../animations';
 import Toasts from '../../services';
 
 let toastManager = null;
@@ -15,7 +14,6 @@ const ToastContainer = () => {
   return (
     <Toast
       ref={toastRef}
-      animations={animations}
       theme={infoTheme}
     />
   );
