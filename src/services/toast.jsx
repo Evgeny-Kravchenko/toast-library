@@ -9,6 +9,7 @@ export default class Toasts {
   refToastContainer;
   positionX;
   positionY;
+  showingDuration;
 
   constructor(refToastContainer) {
     if (Toasts._instance) {
@@ -44,6 +45,11 @@ export default class Toasts {
     return this;
   }
 
+  setShowingDuration(ms) {
+    this.showingDuration = ms;
+    return this;
+  }
+
   show() {
     const type = this.type;
     const title = this.title;
@@ -52,7 +58,15 @@ export default class Toasts {
     const positionX = this.positionX;
     const positionY = this.positionY;
     const position = { positionX, positionY };
-    this.refToastContainer.current.show({ type, backgroundColor, title, description, position });
+    const showingDuration = this.showingDuration;
+    this.refToastContainer.current.show({
+      type,
+      backgroundColor,
+      title,
+      description,
+      position,
+      showingDuration,
+    });
   }
 
   hide() {

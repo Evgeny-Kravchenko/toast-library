@@ -31,6 +31,22 @@ export default class Toast extends Component {
     this.setState({ isShowed: false });
   }
 
+  componentDidUpdate() {
+    let { showingDuration } = this.state.options;
+    if (showingDuration) {
+      this.showingDurationId = setTimeout(() => {
+        this.setState((prevState) => ({
+          options: { ...prevState.options, showingDuration: null },
+        }));
+        this.hide();
+      }, showingDuration);
+    }
+  }
+
+  componentWillUnmount() {
+    clearTimeout(this.showingDurationId);
+  }
+
   render() {
     const { theme, animations } = this.props;
     const { type = 'info', title, backgroundColor, description, position } = this.state.options;
