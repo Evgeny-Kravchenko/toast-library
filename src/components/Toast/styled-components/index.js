@@ -3,10 +3,8 @@ import styled from 'styled-components';
 export const ToastWrapper = styled.div`
   display: ${(props) => (props.position ? 'block' : 'none')};
   position: fixed;
-  ${(props) => (props.position && props.position.positionY) || 'bottom'}: ${(props) =>
-    (props.indents && props.indents.indentY) || 10}px;
-  ${(props) => (props.position && props.position.positionX) || 'left'}: ${(props) =>
-    (props.indents && props.indents.indentY) || 10}px;
+  ${(props) => props.position.positionY}: ${(props) => props.indents.indentY}px;
+  ${(props) => props.position.positionX}: ${(props) => props.indents.indentY}px;
   width: 400px;
   padding: 20px;
   background-color: ${(props) => props.backgroundColor || props.theme.backgroundColor};

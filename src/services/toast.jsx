@@ -1,5 +1,10 @@
 import React from 'react';
 import animations from '../animations';
+import {
+  DEFAULT_BACKGROUND_COLOR,
+  DEFAULT_DESCRIPTION,
+  DEFAULT_TITLE,
+} from '../constants';
 
 export default class Toasts {
   static _instance = null;
@@ -70,9 +75,9 @@ export default class Toasts {
 
   show() {
     const type = this.type;
-    const title = this.title;
-    const description = this.description;
-    const backgroundColor = this.backgroundColor;
+    const title = this.title || DEFAULT_TITLE;
+    const description = this.description || DEFAULT_DESCRIPTION;
+    const backgroundColor = this.backgroundColor || DEFAULT_BACKGROUND_COLOR;
     const positionX = this.positionX;
     const positionY = this.positionY;
     const position = { positionX, positionY };
@@ -80,7 +85,7 @@ export default class Toasts {
     const indentX = this.indentX;
     const indentY = this.indentY;
     const indents = { indentX, indentY };
-    const animation = this.animation;
+    const animation = this.animation || animations.slide;
     this.refToastContainer.current.show({
       type,
       backgroundColor,

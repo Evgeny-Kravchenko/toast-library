@@ -11,13 +11,6 @@ export default {
 export const Sandbox = () => {
   const onShow = () => {
     toastManager
-      .setType('info')
-      .setTitle('Info component')
-      .setColorOfBackground('orange')
-      .setDescription('Here is the custom description')
-      .setPosition('bottom', 'left')
-      .setShowingDuration(2000)
-      .setIndent(25, 25)
       .setAnimation('puff')
       .show();
   };
