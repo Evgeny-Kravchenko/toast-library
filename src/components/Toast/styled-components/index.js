@@ -1,9 +1,10 @@
 import styled from 'styled-components';
 
 export const ToastWrapper = styled.div`
+  display: ${(props) => (props.position ? 'block' : 'none')};
   position: fixed;
-  bottom: 20px;
-  right: 20px;
+  ${(props) => (props.position && props.position.positionY) || 'bottom'}: 10px;
+  ${(props) => (props.position && props.position.positionX) || 'left'}: 10px;
   width: 400px;
   padding: 20px;
   background-color: ${(props) => props.backgroundColor || props.theme.backgroundColor};
@@ -57,10 +58,12 @@ export const ToastBody = styled.div`
   display: flex;
   justify-content: space-around;
   align-items: center;
+  flex-wrap: wrap;
   width: 100%;
-  padding-top: 10px;
 `;
 
 export const ToastDescription = styled.p`
-  margin: 0;
+  margin: 0 20px;
+  flex-grow: 1;
+  text-align: justify;
 `;

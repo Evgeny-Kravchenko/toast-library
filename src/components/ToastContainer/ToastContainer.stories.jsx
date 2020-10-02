@@ -15,6 +15,7 @@ export const Sandbox = () => {
       .setTitle('Info component')
       .setColorOfBackground('orange')
       .setDescription('Here is the custom description')
+      .setPosition('top', 'right')
       .show();
   };
   const onHide = () => {
