@@ -17,6 +17,7 @@ export const Sandbox = () => {
       .setDescription('Here is the custom description')
       .setPosition('bottom', 'left')
       .setShowingDuration(1000)
+      .setIndent(25, 25)
       .show();
   };
   const onHide = () => {

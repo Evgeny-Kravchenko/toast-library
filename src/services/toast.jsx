@@ -2,14 +2,17 @@ import React from 'react';
 
 export default class Toasts {
   static _instance = null;
-  type;
-  title;
-  description;
-  backgroundColor;
-  refToastContainer;
-  positionX;
-  positionY;
-  showingDuration;
+
+  type = null;
+  title = null;
+  description = null;
+  backgroundColor = null;
+  refToastContainer = null;
+  positionX = null;
+  positionY = null;
+  showingDuration = null;
+  indentX = null;
+  indentY = null;
 
   constructor(refToastContainer) {
     if (Toasts._instance) {
@@ -50,6 +53,12 @@ export default class Toasts {
     return this;
   }
 
+  setIndent(x, y) {
+    this.indentX = x;
+    this.indentY = y;
+    return this;
+  }
+
   show() {
     const type = this.type;
     const title = this.title;
@@ -59,6 +68,10 @@ export default class Toasts {
     const positionY = this.positionY;
     const position = { positionX, positionY };
     const showingDuration = this.showingDuration;
+    const indentX = this.indentX;
+    const indentY = this.indentY;
+    const indents = { indentX, indentY };
+
     this.refToastContainer.current.show({
       type,
       backgroundColor,
@@ -66,6 +79,7 @@ export default class Toasts {
       description,
       position,
       showingDuration,
+      indents,
     });
   }
 

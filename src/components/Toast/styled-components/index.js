@@ -3,27 +3,16 @@ import styled from 'styled-components';
 export const ToastWrapper = styled.div`
   display: ${(props) => (props.position ? 'block' : 'none')};
   position: fixed;
-  ${(props) => (props.position && props.position.positionY) || 'bottom'}: 10px;
-  ${(props) => (props.position && props.position.positionX) || 'left'}: 10px;
+  ${(props) => (props.position && props.position.positionY) || 'bottom'}: ${(props) =>
+    (props.indents && props.indents.indentY) || 10}px;
+  ${(props) => (props.position && props.position.positionX) || 'left'}: ${(props) =>
+    (props.indents && props.indents.indentY) || 10}px;
   width: 400px;
   padding: 20px;
   background-color: ${(props) => props.backgroundColor || props.theme.backgroundColor};
   border-radius: 3%;
   color: ${(props) => props.theme.color};
   animation: ${(props) => props.animation} 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
-
-  @keyframes swing-in-top-fwd {
-    0% {
-      transform: rotateX(-100deg);
-      transform-origin: top;
-      opacity: 0;
-    }
-    100% {
-      transform: rotateX(0deg);
-      transform-origin: top;
-      opacity: 1;
-    }
-  }
 `;
 
 export const ToastHeader = styled.header`

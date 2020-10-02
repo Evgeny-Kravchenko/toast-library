@@ -49,7 +49,14 @@ export default class Toast extends Component {
 
   render() {
     const { theme, animations } = this.props;
-    const { type = 'info', title, backgroundColor, description, position } = this.state.options;
+    const {
+      type = 'info',
+      title,
+      backgroundColor,
+      description,
+      position,
+      indents,
+    } = this.state.options;
     const animation = this.state.isShowed ? animations.appearance : animations.disappearance;
     return (
       <ToastWrapper
@@ -58,6 +65,7 @@ export default class Toast extends Component {
         animation={animation}
         backgroundColor={backgroundColor}
         position={position}
+        indents={indents}
       >
         <ToastHeader>
           <Title>{title}</Title>
