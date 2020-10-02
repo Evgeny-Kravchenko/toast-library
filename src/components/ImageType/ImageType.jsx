@@ -5,6 +5,8 @@ const Image = styled.svg`
   fill: ${(props) => props.theme.color};
   width: 30px;
   height: 30px;
+  margin: 10px auto;
+  flex-grow: 0.5;
 `;
 
 const ImageType = ({ theme, type }) => {

@@ -1,43 +1,36 @@
 import React from 'react';
-import { createPortal } from 'react-dom';
-import TestComponent from '../components/TestComponent/TestComponent';
-import { errorTheme } from '../default-themes';
+import animations from '../animations';
+import {
+  DEFAULT_BACKGROUND_COLOR,
+  DEFAULT_DESCRIPTION,
+  DEFAULT_TITLE,
+} from '../constants';
 
 export default class Toasts {
   static _instance = null;
-  countOfShowedToasts = null;
-  positionX;
-  positionY;
-  type;
-  durationOfShowing;
-  title;
-  description;
-  paddingX;
-  paddingY;
-  colorBackground;
-  animationName;
-  container;
 
-  constructor() {
+  type = null;
+  title = null;
+  description = null;
+  backgroundColor = null;
+  refToastContainer = null;
+  positionX = null;
+  positionY = null;
+  showingDuration = null;
+  indentX = null;
+  indentY = null;
+  animation = null;
+
+  constructor(refToastContainer) {
     if (Toasts._instance) {
       return Toasts._instance;
     }
+    this.refToastContainer = refToastContainer;
     Toasts._instance = this;
-  }
-
-  setPosition(x, y) {
-    this.positionX = x;
-    this.positionY = y;
-    return this;
   }
 
   setType(type) {
     this.type = type;
-    return this;
-  }
-
-  setDurationOfShowing(ms) {
-    this.durationOfShowing = ms;
     return this;
   }
 
@@ -51,28 +44,61 @@ export default class Toasts {
     return this;
   }
 
-  setPadding(x, y) {
-    this.paddingX = x;
-    this.paddingY = y;
-    return this;
-  }
-
   setColorOfBackground(color) {
-    this.colorBackground = color;
+    this.backgroundColor = color;
     return this;
   }
 
-  setAnimationOfShowingAndHidden(animation) {
-    this.animationName = animation;
+  setPosition(x, y) {
+    this.positionX = x;
+    this.positionY = y;
     return this;
   }
 
-  setContainer(container) {
-    this.container = container;
+  setShowingDuration(ms) {
+    this.showingDuration = ms;
+    return this;
+  }
+
+  setIndent(x, y) {
+    this.indentX = x;
+    this.indentY = y;
+    return this;
+  }
+
+  setAnimation(animationName) {
+    if (animations.hasOwnProperty(animationName)) {
+      this.animation = animations[animationName];
+    }
     return this;
   }
 
   show() {
-    //??????
+    const type = this.type;
+    const title = this.title || DEFAULT_TITLE;
+    const description = this.description || DEFAULT_DESCRIPTION;
+    const backgroundColor = this.backgroundColor || DEFAULT_BACKGROUND_COLOR;
+    const positionX = this.positionX;
+    const positionY = this.positionY;
+    const position = { positionX, positionY };
+    const showingDuration = this.showingDuration;
+    const indentX = this.indentX;
+    const indentY = this.indentY;
+    const indents = { indentX, indentY };
+    const animation = this.animation || animations.slide;
+    this.refToastContainer.current.show({
+      type,
+      backgroundColor,
+      title,
+      description,
+      position,
+      showingDuration,
+      indents,
+      animation,
+    });
+  }
+
+  hide() {
+    this.refToastContainer.current.hide();
   }
 }
