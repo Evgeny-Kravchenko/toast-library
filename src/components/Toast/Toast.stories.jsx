@@ -1,7 +1,7 @@
 import React from 'react';
+import { withKnobs, object, text } from '@storybook/addon-knobs';
 import Toast from './Toast';
 import { successTheme, errorTheme, warningTheme, infoTheme } from '../../default-themes';
-import { withKnobs, object, text } from '@storybook/addon-knobs';
 import animations from '../../animations';
 
 // export default {

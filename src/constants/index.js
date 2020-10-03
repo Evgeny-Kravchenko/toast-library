@@ -14,4 +14,3 @@ export const DEFAULT_INDENTS = {
   indentX: DEFAULT_INDENT_X,
   indentY: DEFAULT_INDENT_Y,
 };
-

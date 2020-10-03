@@ -24,34 +24,37 @@ export default class Toast extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isShown: false,
       options: {},
+      isFade: false,
+      isShown: false,
     };
   }
-  onClose() {
-    this.hide();
+
+  componentWillUnmount() {
+    window.removeEventListener('click', this.onClose);
+    window.removeEventListener('onanimationend', this.onAnimationEnd);
   }
 
+  onClose = () => {
+    this.setIsShown(false);
+    this.setState({ isFade: true });
+  };
+
+  onAnimationEnd = () => {
+    const { isFade } = this.state;
+    if (isFade) {
+      this.hide();
+    }
+  };
+
   show(options) {
-    const { showingDuration } = options;
-    const { isShown } = this.state;
-    this.setState(() => {
-      if (showingDuration && !isShown) {
-        this.showingDurationId = setTimeout(() => {
-          this.setState((prevState) => ({
-            isShown: false,
-            options: { ...prevState.options, showingDuration: null },
-          }));
-          this.hide();
-        }, showingDuration);
-      }
-      return { options, isShown: true };
-    });
+    const { setIsShown } = options;
+    this.setIsShown = setIsShown;
+    this.setState(() => ({ options, isShown: true, isFade: false }));
   }
 
   hide() {
     this.setState(() => {
-      clearTimeout(this.showingDurationId);
       return { isShown: false };
     });
   }
@@ -73,7 +76,7 @@ export default class Toast extends Component {
     indents.indentY = indents.indentY || DEFAULT_INDENT_Y;
     let currentAnimation = null;
     if (animation) {
-      currentAnimation = this.state.isShown ? animation.appearance : animation.disappearance;
+      currentAnimation = !this.state.isFade ? animation.appearance : animation.disappearance;
     }
     return (
       this.state.isShown && (
@@ -83,10 +86,11 @@ export default class Toast extends Component {
           backgroundColor={backgroundColor}
           position={position}
           indents={indents}
+          onAnimationEnd={this.onAnimationEnd}
         >
           <ToastHeader>
             <Title>{title}</Title>
-            <CloseButton theme={theme} onClick={() => this.onClose()}>
+            <CloseButton theme={theme} onClick={this.onClose}>
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                 <path d="M284.3 256L506.1 34.1c7.8-7.8 7.8-20.5 0-28.3 -7.8-7.8-20.5-7.8-28.3 0L256 227.7 34.1 5.9c-7.8-7.8-20.5-7.8-28.3 0 -7.8 7.8-7.8 20.5 0 28.3l221.9 221.9L5.9 477.9c-7.8 7.8-7.8 20.5 0 28.3 3.9 3.9 9 5.9 14.1 5.9 5.1 0 10.2-2 14.1-5.9L256 284.3l221.9 221.9c3.9 3.9 9 5.9 14.1 5.9s10.2-2 14.1-5.9c7.8-7.8 7.8-20.5 0-28.3L284.3 256z" />
               </svg>

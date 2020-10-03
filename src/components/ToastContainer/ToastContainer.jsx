@@ -11,12 +11,7 @@ const ToastContainer = () => {
   useLayoutEffect(() => {
     toastManager = new Toasts(toastRef);
   });
-  return (
-    <Toast
-      ref={toastRef}
-      theme={infoTheme}
-    />
-  );
+  return <Toast ref={toastRef} theme={infoTheme} />;
 };
 
 export { ToastContainer, toastManager };
