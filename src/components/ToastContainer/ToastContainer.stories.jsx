@@ -10,9 +10,7 @@ export default {
 
 export const Sandbox = () => {
   const onShow = () => {
-    toastManager
-      .setAnimation('puff')
-      .show();
+    toastManager.setAnimation('puff').setShowingDuration(3000).show();
   };
   const onHide = () => {
     toastManager.hide();
@@ -20,8 +18,12 @@ export const Sandbox = () => {
   return (
     <>
       <ToastContainer />
-      <button onClick={onShow}>Show</button>
-      <button onClick={onHide}>Hide</button>
+      <button type="button" onClick={onShow}>
+        Show
+      </button>
+      <button type="button" onClick={onHide}>
+        Hide
+      </button>
     </>
   );
 };

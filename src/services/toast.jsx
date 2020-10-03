@@ -1,25 +1,33 @@
 import React from 'react';
 import animations from '../animations';
-import {
-  DEFAULT_BACKGROUND_COLOR,
-  DEFAULT_DESCRIPTION,
-  DEFAULT_TITLE,
-} from '../constants';
+import { DEFAULT_BACKGROUND_COLOR, DEFAULT_DESCRIPTION, DEFAULT_TITLE } from '../constants';
 
 export default class Toasts {
   static _instance = null;
 
   type = null;
+
   title = null;
+
   description = null;
+
   backgroundColor = null;
+
   refToastContainer = null;
+
   positionX = null;
+
   positionY = null;
+
   showingDuration = null;
+
   indentX = null;
+
   indentY = null;
+
   animation = null;
+
+  isShown = false;
 
   constructor(refToastContainer) {
     if (Toasts._instance) {
@@ -73,20 +81,35 @@ export default class Toasts {
     return this;
   }
 
-  show() {
-    const type = this.type;
+  setIsShown = (value) => {
+    if (!value) {
+      clearTimeout(this.timerId);
+    }
+    this.isShown = value;
+  };
+
+  async show() {
+    const {
+      type,
+      positionX,
+      positionY,
+      indentX,
+      indentY,
+      showingDuration,
+      setIsShown,
+      isShown,
+    } = this;
+    if (isShown) {
+      return;
+    }
     const title = this.title || DEFAULT_TITLE;
     const description = this.description || DEFAULT_DESCRIPTION;
     const backgroundColor = this.backgroundColor || DEFAULT_BACKGROUND_COLOR;
-    const positionX = this.positionX;
-    const positionY = this.positionY;
     const position = { positionX, positionY };
-    const showingDuration = this.showingDuration;
-    const indentX = this.indentX;
-    const indentY = this.indentY;
     const indents = { indentX, indentY };
     const animation = this.animation || animations.slide;
-    this.refToastContainer.current.show({
+    this.setIsShown(true);
+    await this.refToastContainer.current.show({
       type,
       backgroundColor,
       title,
@@ -95,10 +118,17 @@ export default class Toasts {
       showingDuration,
       indents,
       animation,
+      setIsShown,
+      isShown,
     });
+    this.timerId =
+      showingDuration && this.isShown && setTimeout(() => this.hide(), showingDuration);
   }
 
   hide() {
-    this.refToastContainer.current.hide();
+    if (this.isShown) {
+      clearTimeout(this.timerId);
+      this.refToastContainer.current.onClose();
+    }
   }
 }
