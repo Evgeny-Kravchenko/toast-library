@@ -1,6 +1,6 @@
-import React from 'react';
 import animations from '../animations';
 import { DEFAULT_BACKGROUND_COLOR, DEFAULT_DESCRIPTION, DEFAULT_TITLE } from '../constants';
+import { defaultThemes } from '../default-themes';
 
 export default class Toasts {
   static _instance = null;
@@ -104,7 +104,10 @@ export default class Toasts {
     }
     const title = this.title || DEFAULT_TITLE;
     const description = this.description || DEFAULT_DESCRIPTION;
-    const backgroundColor = this.backgroundColor || DEFAULT_BACKGROUND_COLOR;
+    const backgroundColor =
+      this.backgroundColor ||
+      (type && defaultThemes[type].backgroundColor) ||
+      DEFAULT_BACKGROUND_COLOR;
     const position = { positionX, positionY };
     const indents = { indentX, indentY };
     const animation = this.animation || animations.slide;
