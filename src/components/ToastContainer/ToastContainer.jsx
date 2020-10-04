@@ -2,6 +2,7 @@ import React, { useLayoutEffect, useRef } from 'react';
 
 import Toast from '../Toast';
 import Toasts from '../../services';
+import Portal from '../Portal/Portal';
 
 // eslint-disable-next-line import/no-mutable-exports
 let toastManager = null;
@@ -11,7 +12,11 @@ const ToastContainer = () => {
   useLayoutEffect(() => {
     toastManager = new Toasts(toastRef);
   }, []);
-  return <Toast ref={toastRef} />;
+  return (
+    <Portal>
+      <Toast ref={toastRef} />
+    </Portal>
+  );
 };
 
 export { ToastContainer, toastManager };
