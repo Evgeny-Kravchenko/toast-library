@@ -1,7 +1,7 @@
 import React from 'react';
 import { withKnobs } from '@storybook/addon-knobs';
 
-import { ToastContainer, toastManager } from './ToastContainer';
+import { toastManager, ToastContainer } from '../../index';
 
 export default {
   title: 'Sandbox',
@@ -11,9 +11,8 @@ export default {
 export const Sandbox = () => {
   const onShow = () => {
     toastManager
-      .setAnimation('swing')
-      .setShowingDuration(3000)
-      .setType('error')
+      .setAnimation('slide')
+      .setType('warning')
       .setTitle('Something went wrong')
       .setDescription(
         'Something went wrong and I assume that you must fix it. If you will not do it I will be disappointed'
