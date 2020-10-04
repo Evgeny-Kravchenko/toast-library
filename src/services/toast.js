@@ -1,6 +1,7 @@
-import React from 'react';
 import animations from '../animations';
 import { DEFAULT_BACKGROUND_COLOR, DEFAULT_DESCRIPTION, DEFAULT_TITLE } from '../constants';
+import { defaultThemes } from '../default-themes';
+import { DEFAULT_TEXT_COLOR } from '../default-themes/constants';
 
 export default class Toasts {
   static _instance = null;
@@ -75,7 +76,7 @@ export default class Toasts {
   }
 
   setAnimation(animationName) {
-    if (animations.hasOwnProperty(animationName)) {
+    if (Object.prototype.hasOwnProperty.call(animations, animationName)) {
       this.animation = animations[animationName];
     }
     return this;
@@ -104,7 +105,11 @@ export default class Toasts {
     }
     const title = this.title || DEFAULT_TITLE;
     const description = this.description || DEFAULT_DESCRIPTION;
-    const backgroundColor = this.backgroundColor || DEFAULT_BACKGROUND_COLOR;
+    const backgroundColor =
+      this.backgroundColor ||
+      (type && defaultThemes[type].backgroundColor) ||
+      DEFAULT_BACKGROUND_COLOR;
+    const color = (type && defaultThemes[type].color) || DEFAULT_TEXT_COLOR;
     const position = { positionX, positionY };
     const indents = { indentX, indentY };
     const animation = this.animation || animations.slide;
@@ -120,6 +125,7 @@ export default class Toasts {
       animation,
       setIsShown,
       isShown,
+      color,
     });
     this.timerId =
       showingDuration && this.isShown && setTimeout(() => this.hide(), showingDuration);

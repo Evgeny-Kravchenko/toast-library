@@ -28,3 +28,10 @@ export const successTheme = {
   backgroundColor: SUCCESS_BACKGROUND_COLOR,
   color: SUCCESS_TEXT_COLOR,
 };
+
+export default {
+  info: infoTheme,
+  warning: warningTheme,
+  error: errorTheme,
+  success: successTheme,
+};

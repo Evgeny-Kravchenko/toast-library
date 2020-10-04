@@ -1,3 +1,3 @@
-import TestComponent from './components/Toast/Toast';
+import { ToastContainer, toastManager } from './components/ToastContainer';
 
-export default TestComponent;
+export { ToastContainer, toastManager };

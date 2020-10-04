@@ -1,3 +1,3 @@
-import { ToastContainer } from './ToastContainer';
+import { ToastContainer, toastManager } from './ToastContainer';
 
-export default ToastContainer;
+export { ToastContainer, toastManager };

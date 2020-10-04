@@ -6,3 +6,4 @@ export const SUCCESS_TEXT_COLOR = '#ffffff';
 export const INFO_TEXT_COLOR = '#ffffff';
 export const WARNING_TEXT_COLOR = '#000000';
 export const ERROR_TEXT_COLOR = '#ffffff';
+export const DEFAULT_TEXT_COLOR = '#ffffff';

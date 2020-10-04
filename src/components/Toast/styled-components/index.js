@@ -7,9 +7,9 @@ export const ToastWrapper = styled.div`
   ${(props) => props.position.positionX}: ${(props) => props.indents.indentY}px;
   width: 400px;
   padding: 20px;
-  background-color: ${(props) => props.backgroundColor || props.theme.backgroundColor};
+  background-color: ${(props) => props.backgroundColor};
   border-radius: 3%;
-  color: ${(props) => props.theme.color};
+  color: ${(props) => props.color};
   animation: ${(props) => props.animation} 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
 `;
 
@@ -33,7 +33,7 @@ export const CloseButton = styled.button`
   transition: 0.2s;
 
   svg {
-    fill: ${(props) => props.theme.color};
+    fill: ${(props) => props.color};
   }
 
   &:hover {

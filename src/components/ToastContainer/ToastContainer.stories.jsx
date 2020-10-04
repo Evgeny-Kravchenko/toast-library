@@ -1,7 +1,7 @@
 import React from 'react';
 import { withKnobs } from '@storybook/addon-knobs';
 
-import { ToastContainer, toastManager } from './ToastContainer';
+import { toastManager, ToastContainer } from '../../index';
 
 export default {
   title: 'Sandbox',
@@ -10,7 +10,14 @@ export default {
 
 export const Sandbox = () => {
   const onShow = () => {
-    toastManager.setAnimation('puff').setShowingDuration(3000).show();
+    toastManager
+      .setAnimation('slide')
+      .setType('warning')
+      .setTitle('Something went wrong')
+      .setDescription(
+        'Something went wrong and I assume that you must fix it. If you will not do it I will be disappointed'
+      )
+      .show();
   };
   const onHide = () => {
     toastManager.hide();
