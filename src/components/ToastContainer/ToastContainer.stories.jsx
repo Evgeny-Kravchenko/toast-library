@@ -11,7 +11,7 @@ export default {
 export const Sandbox = () => {
   const onShow = () => {
     toastManager
-      .setAnimation('slide')
+      .setAnimation('puff')
       .setType('warning')
       .setTitle('Something went wrong')
       .setDescription(
