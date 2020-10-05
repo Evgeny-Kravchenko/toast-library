@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
-import ImageType from '../ImageType';
+import ImageType from 'src/components/ImageType';
+
 import {
   ToastWrapper,
   CloseButton,

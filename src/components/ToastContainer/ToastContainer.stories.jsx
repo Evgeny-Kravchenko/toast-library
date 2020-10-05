@@ -1,7 +1,7 @@
 import React from 'react';
 import { withKnobs } from '@storybook/addon-knobs';
 
-import { toastManager, ToastContainer } from '../../index';
+import { toastManager, ToastContainer } from 'src';
 
 export default {
   title: 'Sandbox',

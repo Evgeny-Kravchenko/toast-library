@@ -13,7 +13,10 @@ module.exports = {
       },
     });
     config.resolve.extensions.push('.js', '.jsx');
-
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      src: path.resolve(__dirname, '../src/'),
+    };
     return config;
   },
 };
