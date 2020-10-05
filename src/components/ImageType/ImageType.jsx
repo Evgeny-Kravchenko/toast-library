@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 const Image = styled.svg`
@@ -53,6 +54,11 @@ const ImageType = ({ type, color }) => {
       );
     }
   }
+};
+
+ImageType.propTypes = {
+  type: PropTypes.string.isRequired,
+  color: PropTypes.string.isRequired,
 };
 
 export default ImageType;
