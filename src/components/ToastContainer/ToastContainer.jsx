@@ -3,6 +3,7 @@ import React, { useLayoutEffect, useRef } from 'react';
 import Toast from '../Toast';
 import Toasts from '../../services';
 import Portal from '../Portal/Portal';
+import ErrorBoundary from '../ErrorBoundary';
 
 // eslint-disable-next-line import/no-mutable-exports
 let toastManager = null;
@@ -13,9 +14,11 @@ const ToastContainer = () => {
     toastManager = new Toasts(toastRef);
   }, []);
   return (
-    <Portal>
-      <Toast ref={toastRef} />
-    </Portal>
+    <ErrorBoundary>
+      <Portal>
+        <Toast ref={toastRef} />
+      </Portal>
+    </ErrorBoundary>
   );
 };
 
