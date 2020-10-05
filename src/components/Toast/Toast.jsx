@@ -1,6 +1,7 @@
-import React, { Component } from 'react';
+import React, { Component, createRef } from 'react';
 
-import ImageType from '../ImageType';
+import ImageType from 'src/components/ImageType';
+
 import {
   ToastWrapper,
   CloseButton,
@@ -27,16 +28,22 @@ export default class Toast extends Component {
       options: {},
       isFade: false,
       isShown: false,
+      startCoordinateX: null,
+      isMouseButtonPressedDown: false,
     };
+    this.toastWrapperRef = createRef();
   }
 
   componentWillUnmount() {
-    window.removeEventListener('click', this.onClose);
-    window.removeEventListener('onanimationend', this.onAnimationEnd);
+    document.removeEventListener('click', this.onClose);
+    document.removeEventListener('onanimationend', this.onAnimationEnd);
+    document.removeEventListener('onmousedown', this.onMousePress);
   }
 
   onClose = () => {
     this.setIsShown(false);
+    document.removeEventListener('mouseup', this.onMouseUp);
+    this.toastWrapperRef.current.parentElement.style.opacity = `1`;
     this.setState({ isFade: true });
   };
 
@@ -44,6 +51,39 @@ export default class Toast extends Component {
     const { isFade } = this.state;
     if (isFade) {
       this.hide();
+    }
+  };
+
+  onMouseDown = (event) => {
+    const { isMouseButtonPressedDown } = this.state;
+    if (!isMouseButtonPressedDown) {
+      document.addEventListener('mousemove', this.onMouseMove);
+      document.addEventListener('mouseup', this.onMouseUp);
+      this.toastWrapperRef.current.parentElement.style.opacity = 0.3;
+      this.setState({ startCoordinateX: event.pageX, isMouseButtonPressedDown: true });
+    }
+  };
+
+  onMouseUp = () => {
+    this.toastWrapperRef.current.style.left = '10px';
+    this.toastWrapperRef.current.parentElement.style.opacity = `1`;
+    document.removeEventListener('mousemove', this.onMouseMove);
+    document.removeEventListener('mouseup', this.onMouseUp);
+    this.setState({ startCoordinateX: null, isMouseButtonPressedDown: false });
+  };
+
+  onMouseMove = (event) => {
+    const {
+      isMouseButtonPressedDown,
+      options: {
+        position: { positionX },
+      },
+    } = this.state;
+    if (isMouseButtonPressedDown) {
+      this.toastWrapperRef.current.style[positionX] = `${
+        event.pageX - this.toastWrapperRef.current.offsetWidth / 2
+      }px`;
+      this.isItNeededToHide(event.pageX);
     }
   };
 
@@ -55,9 +95,15 @@ export default class Toast extends Component {
 
   hide() {
     this.setState(() => {
-      return { isShown: false };
+      return { isShown: false, startCoordinateX: null, isMouseButtonPressedDown: false };
     });
   }
+
+  isItNeededToHide = (x) => {
+    if (x < 0 || x > window.innerWidth) {
+      this.onClose();
+    }
+  };
 
   render() {
     const {
@@ -91,10 +137,16 @@ export default class Toast extends Component {
           position={position}
           indents={indents}
           onAnimationEnd={this.onAnimationEnd}
+          onMouseDown={(event) => this.onMouseDown(event)}
+          ref={this.toastWrapperRef}
         >
           <ToastHeader>
             <Title>{title}</Title>
-            <CloseButton color={color} onClick={this.onClose}>
+            <CloseButton
+              color={color}
+              onClick={this.onClose}
+              onMouseDown={(event) => event.stopPropagation()}
+            >
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                 <path d="M284.3 256L506.1 34.1c7.8-7.8 7.8-20.5 0-28.3 -7.8-7.8-20.5-7.8-28.3 0L256 227.7 34.1 5.9c-7.8-7.8-20.5-7.8-28.3 0 -7.8 7.8-7.8 20.5 0 28.3l221.9 221.9L5.9 477.9c-7.8 7.8-7.8 20.5 0 28.3 3.9 3.9 9 5.9 14.1 5.9 5.1 0 10.2-2 14.1-5.9L256 284.3l221.9 221.9c3.9 3.9 9 5.9 14.1 5.9s10.2-2 14.1-5.9c7.8-7.8 7.8-20.5 0-28.3L284.3 256z" />
               </svg>
