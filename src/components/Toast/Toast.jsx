@@ -25,89 +25,56 @@ export default class Toast extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      options: {},
-      isFade: false,
-      isShown: false,
-      startCoordinateX: null,
-      isMouseButtonPressedDown: false,
+      arrayOfToasts: [],
+      defaultIndentY: DEFAULT_INDENT_Y,
     };
-    this.toastWrapperRef = createRef();
   }
 
-  componentWillUnmount() {
-    document.removeEventListener('click', this.onClose);
-    document.removeEventListener('onanimationend', this.onAnimationEnd);
-    document.removeEventListener('onmousedown', this.onMouseDown);
-  }
-
-  onClose = () => {
-    this.setIsShown(false);
-    document.removeEventListener('mouseup', this.onMouseUp);
-    this.toastWrapperRef.current.parentElement.style.opacity = `1`;
-    this.setState({ isFade: true });
+  onClose = (id) => {
+    this.setState((prevState) => {
+      return {
+        arrayOfToasts: prevState.arrayOfToasts.map((toast) => {
+          if (toast.id === id) {
+            return {
+              ...toast,
+              isFade: true,
+            };
+          }
+          return toast;
+        }),
+      };
+    });
   };
 
-  onAnimationEnd = () => {
-    const { isFade } = this.state;
+  onAnimationEnd = (id, isFade) => {
     if (isFade) {
-      this.hide();
-    }
-  };
-
-  onMouseDown = (event) => {
-    const { isMouseButtonPressedDown } = this.state;
-    if (!isMouseButtonPressedDown) {
-      document.addEventListener('mousemove', this.onMouseMove);
-      document.addEventListener('mouseup', this.onMouseUp);
-      this.toastWrapperRef.current.parentElement.style.opacity = '0.3';
-      this.setState({ startCoordinateX: event.pageX, isMouseButtonPressedDown: true });
-    }
-  };
-
-  onMouseUp = () => {
-    const {
-      options: {
-        position: { positionX },
-        indents: { indentX },
-      },
-    } = this.state;
-    this.toastWrapperRef.current.style[positionX] = `${indentX || DEFAULT_INDENT_X}px`;
-    this.toastWrapperRef.current.parentElement.style.opacity = `1`;
-    document.removeEventListener('mousemove', this.onMouseMove);
-    document.removeEventListener('mouseup', this.onMouseUp);
-    this.setState({ startCoordinateX: null, isMouseButtonPressedDown: false });
-  };
-
-  onMouseMove = (event) => {
-    const {
-      isMouseButtonPressedDown,
-      options: {
-        position: { positionX },
-      },
-    } = this.state;
-    if (isMouseButtonPressedDown) {
-      if (positionX === 'right') {
-        this.toastWrapperRef.current.style[positionX] = `${
-          window.innerWidth - event.pageX - this.toastWrapperRef.current.offsetWidth / 2
-        }px`;
-      } else {
-        this.toastWrapperRef.current.style[positionX] = `${
-          event.pageX - this.toastWrapperRef.current.offsetWidth / 2
-        }px`;
-      }
-      this.isItNeededToHide(event.pageX);
+      this.hide(id);
     }
   };
 
   show(options) {
-    const { setIsShown } = options;
-    this.setIsShown = setIsShown;
-    this.setState(() => ({ options, isShown: true, isFade: false }));
+    let { arrayOfToasts, onDelete, defaultIndentY } = options;
+    this.onDeleteFromService = onDelete;
+    this.setState({ arrayOfToasts, defaultIndentY });
   }
 
-  hide() {
-    this.setState(() => {
-      return { isShown: false, startCoordinateX: null, isMouseButtonPressedDown: false };
+  hide(id) {
+    const { defaultIndentY } = this.state;
+    this.onDeleteFromService(id);
+    this.setState((prevState) => {
+      return {
+        arrayOfToasts: prevState.arrayOfToasts
+          .filter((toast) => toast.id !== id)
+          .map((toast, idx, arr) => {
+            if (idx !== 0) {
+              toast.indents.indentY =
+                arr[idx - 1].ref.current.offsetHeight + defaultIndentY + 10;
+            } else {
+              toast.indents.indentY = this.state.defaultIndentY;
+            }
+            return toast;
+          }),
+      };
     });
   }
 
@@ -118,45 +85,31 @@ export default class Toast extends Component {
   };
 
   render() {
-    const {
-      options: {
-        type = DEFAULT_TYPE,
-        title,
-        backgroundColor,
-        description,
-        position = DEFAULT_POSITION,
-        indents = DEFAULT_INDENTS,
-        animation,
-        color,
-      },
-      isFade,
-      isShown,
-    } = this.state;
-    position.positionX = position.positionX || DEFAULT_POSITION_X;
-    position.positionY = position.positionY || DEFAULT_POSITION_Y;
-    indents.indentX = indents.indentX || DEFAULT_INDENT_X;
-    indents.indentY = indents.indentY || DEFAULT_INDENT_Y;
-    let currentAnimation = null;
-    if (animation) {
-      currentAnimation = !isFade ? animation.appearance : animation.disappearance;
-    }
-    return (
-      isShown && (
+    const { arrayOfToasts } = this.state;
+    return arrayOfToasts.map((options) => {
+      let currentAnimation = null;
+      if (options.animation) {
+        currentAnimation = !options.isFade
+          ? options.animation.appearance
+          : options.animation.disappearance;
+      }
+      return (
         <ToastWrapper
-          color={color}
+          color={options.color}
           animation={currentAnimation}
-          backgroundColor={backgroundColor}
-          position={position}
-          indents={indents}
-          onAnimationEnd={this.onAnimationEnd}
+          backgroundColor={options.backgroundColor}
+          position={options.position}
+          indents={options.indents}
+          onAnimationEnd={() => this.onAnimationEnd(options.id, options.isFade)}
           onMouseDown={(event) => this.onMouseDown(event)}
-          ref={this.toastWrapperRef}
+          ref={options.ref}
+          key={options.id}
         >
           <ToastHeader>
-            <Title>{title}</Title>
+            <Title>{options.title}</Title>
             <CloseButton
-              color={color}
-              onClick={this.onClose}
+              color={options.color}
+              onClick={() => this.onClose(options.id)}
               onMouseDown={(event) => event.stopPropagation()}
             >
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
@@ -165,11 +118,11 @@ export default class Toast extends Component {
             </CloseButton>
           </ToastHeader>
           <ToastBody>
-            <ImageType color={color} type={type} />
-            <ToastDescription>{description}</ToastDescription>
+            <ImageType color={options.color} type={options.type} />
+            <ToastDescription>{options.description}</ToastDescription>
           </ToastBody>
         </ToastWrapper>
-      )
-    );
+      );
+    });
   }
 }

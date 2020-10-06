@@ -2,6 +2,7 @@ import animations from '../animations';
 import { DEFAULT_BACKGROUND_COLOR, DEFAULT_DESCRIPTION, DEFAULT_TITLE } from '../constants';
 import { defaultThemes } from '../default-themes';
 import { DEFAULT_TEXT_COLOR } from '../default-themes/constants';
+import { createRef } from 'react';
 
 export default class Toasts {
   static _instance = null;
@@ -28,7 +29,7 @@ export default class Toasts {
 
   animation = null;
 
-  isShown = false;
+  arrayOfToasts = [];
 
   constructor(refToastContainer) {
     if (Toasts._instance) {
@@ -82,11 +83,9 @@ export default class Toasts {
     return this;
   }
 
-  setIsShown = (value) => {
-    if (!value) {
-      clearTimeout(this.timerId);
-    }
-    this.isShown = value;
+  onDelete = (id) => {
+    clearTimeout(this.arrayOfToasts.find((item) => item.id === id).timerId);
+    this.arrayOfToasts = this.arrayOfToasts.filter((item) => item.id !== id);
   };
 
   async show() {
@@ -98,9 +97,9 @@ export default class Toasts {
       indentY,
       showingDuration,
       setIsShown,
-      isShown,
+      arrayOfToasts,
     } = this;
-    if (isShown) {
+    if (arrayOfToasts.length >= 3) {
       return;
     }
     const title = this.title || DEFAULT_TITLE;
@@ -112,9 +111,19 @@ export default class Toasts {
     const color = (type && defaultThemes[type].color) || DEFAULT_TEXT_COLOR;
     const position = { positionX, positionY };
     const indents = { indentX, indentY };
+    if (this.arrayOfToasts.length !== 0) {
+      indents.indentY =
+        window.innerHeight -
+        this.arrayOfToasts[this.arrayOfToasts.length - 1].ref.current.offsetTop +
+        10;
+    }
+
     const animation = this.animation || animations.slide;
-    this.setIsShown(true);
-    await this.refToastContainer.current.show({
+    const id = String(Math.round(Math.random() * 10e6));
+    const timerId =
+      showingDuration &&
+      setTimeout(() => this.refToastContainer.current.onClose(id), showingDuration);
+    this.arrayOfToasts.push({
       type,
       backgroundColor,
       title,
@@ -124,17 +133,17 @@ export default class Toasts {
       indents,
       animation,
       setIsShown,
-      isShown,
       color,
+      id,
+      timerId,
+      ref: createRef(),
+      isFade: false,
     });
-    this.timerId =
-      showingDuration && this.isShown && setTimeout(() => this.hide(), showingDuration);
-  }
 
-  hide() {
-    if (this.isShown) {
-      clearTimeout(this.timerId);
-      this.refToastContainer.current.onClose();
-    }
+    await this.refToastContainer.current.show({
+      arrayOfToasts: this.arrayOfToasts,
+      onDelete: this.onDelete,
+      defaultIndentY: this.indentY,
+    });
   }
 }
