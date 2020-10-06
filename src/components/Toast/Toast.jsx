@@ -11,9 +11,7 @@ import {
   ToastHeader,
 } from './styled-components';
 
-import {
-  DEFAULT_INDENT_Y,
-} from '../../constants';
+import { DEFAULT_INDENT_Y } from '../../constants';
 
 export default class Toast extends Component {
   constructor(props) {
@@ -21,6 +19,7 @@ export default class Toast extends Component {
     this.state = {
       arrayOfToasts: [],
       defaultIndentY: DEFAULT_INDENT_Y,
+      currentPressedToast: null,
     };
   }
 
@@ -46,10 +45,73 @@ export default class Toast extends Component {
     }
   };
 
+  onMouseDown = (event, id) => {
+    const toast = this.state.arrayOfToasts.find((toast) => toast.id === id);
+    document.addEventListener('mouseup', this.onMouseUp);
+    document.addEventListener('mousemove', this.onMouseMove);
+    toast.ref.current.style.setProperty('opacity', '0.3', 'important');
+    toast.isMouseButtonPressedDown = true;
+    this.setState((prevState) => ({
+      ...prevState,
+      currentPressedToast: toast,
+      arrayOfToasts: prevState.arrayOfToasts.map((toast) => {
+        if (toast.id === id) {
+          return {
+            ...toast,
+            isMouseButtonPressedDown: true,
+          };
+        }
+        return toast;
+      }),
+    }));
+  };
+
+  onMouseUp = () => {
+    const { currentPressedToast, defaultIndentX } = this.state;
+    const {
+      position: { positionX },
+    } = currentPressedToast;
+    currentPressedToast.ref.current.style.setProperty('opacity', '1');
+    document.removeEventListener('mouseup', this.onMouseUp);
+    document.removeEventListener('mousemove', this.onMouseMove);
+    currentPressedToast.ref.current.style[positionX] = `${defaultIndentX}px`;
+    this.setState((prevState) => ({
+      ...prevState,
+      currentPressedToast: null,
+      arrayOfToasts: prevState.arrayOfToasts.map((toast) => {
+        if (toast.id === currentPressedToast.id) {
+          return {
+            ...toast,
+            isMouseButtonPressedDown: false,
+          };
+        }
+        return toast;
+      }),
+    }));
+  };
+
+  onMouseMove = (event) => {
+    const {
+      isMouseButtonPressedDown,
+      ref,
+      position: { positionX },
+    } = this.state.currentPressedToast;
+    if (isMouseButtonPressedDown) {
+      if (positionX === 'right') {
+        ref.current.style[positionX] = `${
+          window.innerWidth - event.pageX - ref.current.offsetWidth / 2
+        }px`;
+      } else {
+        ref.current.style[positionX] = `${event.pageX - ref.current.offsetWidth / 2}px`;
+      }
+      this.isItNeededToHide(event.pageX);
+    }
+  };
+
   show(options) {
-    let { arrayOfToasts, onDelete, defaultIndentY } = options;
+    let { arrayOfToasts, onDelete, defaultIndentY, defaultIndentX } = options;
     this.onDeleteFromService = onDelete;
-    this.setState({ arrayOfToasts, defaultIndentY });
+    this.setState({ arrayOfToasts, defaultIndentY, defaultIndentX });
   }
 
   hide(id) {
@@ -105,7 +167,7 @@ export default class Toast extends Component {
           position={position}
           indents={indents}
           onAnimationEnd={() => this.onAnimationEnd(id, isFade)}
-          onMouseDown={(event) => this.onMouseDown(event)}
+          onMouseDown={(event) => this.onMouseDown(event, id)}
           ref={ref}
           key={id}
         >

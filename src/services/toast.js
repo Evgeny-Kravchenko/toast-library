@@ -150,12 +150,14 @@ export default class Toasts {
       timerId,
       ref: createRef(),
       isFade: false,
+      isMouseButtonPressedDown: false,
     });
 
     await this.refToastContainer.current.show({
       arrayOfToasts: this.arrayOfToasts,
       onDelete: this.onDelete,
       defaultIndentY: this.indentY,
+      defaultIndentX: this.indentX,
     });
   }
 }
