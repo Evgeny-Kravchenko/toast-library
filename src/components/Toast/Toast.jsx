@@ -24,6 +24,11 @@ export default class Toast extends Component {
   }
 
   onClose = (id) => {
+    const { currentPressedToast } = this.state;
+    if (currentPressedToast) {
+      this.unsubscribeFromEvents();
+      currentPressedToast.ref.current.style.setProperty('opacity', '1');
+    }
     this.setState((prevState) => {
       return {
         arrayOfToasts: prevState.arrayOfToasts.map((toast) => {
@@ -31,10 +36,12 @@ export default class Toast extends Component {
             return {
               ...toast,
               isFade: true,
+              isMouseButtonPressedDown: false,
             };
           }
           return toast;
         }),
+        currentPressedToast: null,
       };
     });
   };
@@ -72,8 +79,7 @@ export default class Toast extends Component {
       position: { positionX },
     } = currentPressedToast;
     currentPressedToast.ref.current.style.setProperty('opacity', '1');
-    document.removeEventListener('mouseup', this.onMouseUp);
-    document.removeEventListener('mousemove', this.onMouseMove);
+    this.unsubscribeFromEvents();
     currentPressedToast.ref.current.style[positionX] = `${defaultIndentX}px`;
     this.setState((prevState) => ({
       ...prevState,
@@ -108,6 +114,11 @@ export default class Toast extends Component {
     }
   };
 
+  unsubscribeFromEvents = () => {
+    document.removeEventListener('mouseup', this.onMouseUp);
+    document.removeEventListener('mousemove', this.onMouseMove);
+  };
+
   show(options) {
     let { arrayOfToasts, onDelete, defaultIndentY, defaultIndentX } = options;
     this.onDeleteFromService = onDelete;
@@ -134,8 +145,9 @@ export default class Toast extends Component {
   }
 
   isItNeededToHide = (x) => {
+    const { currentPressedToast } = this.state;
     if (x < 0 || x > window.innerWidth) {
-      this.onClose();
+      this.onClose(currentPressedToast.id);
     }
   };
 

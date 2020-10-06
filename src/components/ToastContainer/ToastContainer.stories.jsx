@@ -19,7 +19,7 @@ export const Sandbox = () => {
       )
       .setIndent(5, 5)
       .setColorOfBackground('rgba(0, 0, 0, 0.5)')
-      .setAnimation('swing')
+      .setAnimation('buff')
       .show();
   };
   const onHide = () => {
