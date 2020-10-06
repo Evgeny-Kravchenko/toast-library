@@ -1,3 +1,4 @@
+import { createRef } from 'react';
 import animations from '../animations';
 import {
   DEFAULT_BACKGROUND_COLOR,
@@ -10,7 +11,6 @@ import {
 } from '../constants';
 import { defaultThemes } from '../default-themes';
 import { DEFAULT_TEXT_COLOR } from '../default-themes/constants';
-import { createRef } from 'react';
 
 export default class Toasts {
   static _instance = null;

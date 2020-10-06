@@ -11,7 +11,7 @@ export default {
 export const Sandbox = () => {
   const onShow = () => {
     toastManager
-      .setPosition('right', 'bottom')
+      .setPosition('right', 'top')
       .setType('info')
       .setTitle('It is very important information')
       .setDescription(
@@ -19,7 +19,7 @@ export const Sandbox = () => {
       )
       .setIndent(5, 5)
       .setColorOfBackground('rgba(0, 0, 0, 0.5)')
-      .setAnimation('buff')
+      .setAnimation('puff')
       .show();
   };
   const onHide = () => {

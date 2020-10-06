@@ -53,14 +53,15 @@ export default class Toast extends Component {
   };
 
   onMouseDown = (event, id) => {
-    const toast = this.state.arrayOfToasts.find((toast) => toast.id === id);
+    const { arrayOfToasts } = this.state;
+    const currentToast = arrayOfToasts.find((toast) => toast.id === id);
     document.addEventListener('mouseup', this.onMouseUp);
     document.addEventListener('mousemove', this.onMouseMove);
-    toast.ref.current.style.setProperty('opacity', '0.3', 'important');
-    toast.isMouseButtonPressedDown = true;
+    currentToast.ref.current.style.setProperty('opacity', '0.3', 'important');
+    currentToast.isMouseButtonPressedDown = true;
     this.setState((prevState) => ({
       ...prevState,
-      currentPressedToast: toast,
+      currentPressedToast: currentToast,
       arrayOfToasts: prevState.arrayOfToasts.map((toast) => {
         if (toast.id === id) {
           return {
@@ -98,10 +99,12 @@ export default class Toast extends Component {
 
   onMouseMove = (event) => {
     const {
-      isMouseButtonPressedDown,
-      ref,
-      position: { positionX },
-    } = this.state.currentPressedToast;
+      currentPressedToast: {
+        isMouseButtonPressedDown,
+        ref,
+        position: { positionX },
+      },
+    } = this.state;
     if (isMouseButtonPressedDown) {
       if (positionX === 'right') {
         ref.current.style[positionX] = `${
@@ -119,8 +122,15 @@ export default class Toast extends Component {
     document.removeEventListener('mousemove', this.onMouseMove);
   };
 
+  isItNeededToHide = (x) => {
+    const { currentPressedToast } = this.state;
+    if (x < 0 || x > window.innerWidth) {
+      this.onClose(currentPressedToast.id);
+    }
+  };
+
   show(options) {
-    let { arrayOfToasts, onDelete, defaultIndentY, defaultIndentX } = options;
+    const { arrayOfToasts, onDelete, defaultIndentY, defaultIndentX } = options;
     this.onDeleteFromService = onDelete;
     this.setState({ arrayOfToasts, defaultIndentY, defaultIndentX });
   }
@@ -134,22 +144,25 @@ export default class Toast extends Component {
           .filter((toast) => toast.id !== id)
           .map((toast, idx, arr) => {
             if (idx !== 0) {
-              toast.indents.indentY = arr[idx - 1].ref.current.offsetHeight + defaultIndentY + 10;
-            } else {
-              toast.indents.indentY = this.state.defaultIndentY;
+              return {
+                ...toast,
+                indents: {
+                  ...toast.indents,
+                  indentY: arr[idx - 1].ref.current.offsetHeight + defaultIndentY + 10,
+                },
+              };
             }
-            return toast;
+            return {
+              ...toast,
+              indents: {
+                ...toast.indents,
+                indentY: prevState.defaultIndentY,
+              },
+            };
           }),
       };
     });
   }
-
-  isItNeededToHide = (x) => {
-    const { currentPressedToast } = this.state;
-    if (x < 0 || x > window.innerWidth) {
-      this.onClose(currentPressedToast.id);
-    }
-  };
 
   render() {
     const { arrayOfToasts } = this.state;
