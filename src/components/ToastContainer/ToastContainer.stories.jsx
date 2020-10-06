@@ -10,16 +10,7 @@ export default {
 
 export const Sandbox = () => {
   const onShow = () => {
-    toastManager
-      .setAnimation('puff')
-      .setType('warning')
-      .setTitle('Something went wrong')
-      .setPosition('right', 'bottom')
-      .setIndent(20, 20)
-      .setDescription(
-        'Something went wrong and I assume that you must fix it. If you will not do it I will be disappointed'
-      )
-      .show();
+    toastManager.setPosition('right', 'bottom').show();
   };
   const onHide = () => {
     toastManager.hide();

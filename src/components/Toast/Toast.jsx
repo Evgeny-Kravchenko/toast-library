@@ -1,4 +1,4 @@
-import React, { Component, createRef } from 'react';
+import React, { Component } from 'react';
 
 import ImageType from 'src/components/ImageType';
 
@@ -12,13 +12,7 @@ import {
 } from './styled-components';
 
 import {
-  DEFAULT_POSITION_X,
-  DEFAULT_POSITION_Y,
-  DEFAULT_POSITION,
-  DEFAULT_TYPE,
-  DEFAULT_INDENT_X,
   DEFAULT_INDENT_Y,
-  DEFAULT_INDENTS,
 } from '../../constants';
 
 export default class Toast extends Component {
@@ -67,8 +61,7 @@ export default class Toast extends Component {
           .filter((toast) => toast.id !== id)
           .map((toast, idx, arr) => {
             if (idx !== 0) {
-              toast.indents.indentY =
-                arr[idx - 1].ref.current.offsetHeight + defaultIndentY + 10;
+              toast.indents.indentY = arr[idx - 1].ref.current.offsetHeight + defaultIndentY + 10;
             } else {
               toast.indents.indentY = this.state.defaultIndentY;
             }
@@ -87,29 +80,40 @@ export default class Toast extends Component {
   render() {
     const { arrayOfToasts } = this.state;
     return arrayOfToasts.map((options) => {
+      const {
+        animation,
+        color,
+        backgroundColor,
+        position,
+        indents,
+        isFade,
+        id,
+        ref,
+        title,
+        description,
+        type,
+      } = options;
       let currentAnimation = null;
-      if (options.animation) {
-        currentAnimation = !options.isFade
-          ? options.animation.appearance
-          : options.animation.disappearance;
+      if (animation) {
+        currentAnimation = !isFade ? animation.appearance : animation.disappearance;
       }
       return (
         <ToastWrapper
-          color={options.color}
+          color={color}
           animation={currentAnimation}
-          backgroundColor={options.backgroundColor}
-          position={options.position}
-          indents={options.indents}
-          onAnimationEnd={() => this.onAnimationEnd(options.id, options.isFade)}
+          backgroundColor={backgroundColor}
+          position={position}
+          indents={indents}
+          onAnimationEnd={() => this.onAnimationEnd(id, isFade)}
           onMouseDown={(event) => this.onMouseDown(event)}
-          ref={options.ref}
-          key={options.id}
+          ref={ref}
+          key={id}
         >
           <ToastHeader>
-            <Title>{options.title}</Title>
+            <Title>{title}</Title>
             <CloseButton
-              color={options.color}
-              onClick={() => this.onClose(options.id)}
+              color={color}
+              onClick={() => this.onClose(id)}
               onMouseDown={(event) => event.stopPropagation()}
             >
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
@@ -118,8 +122,8 @@ export default class Toast extends Component {
             </CloseButton>
           </ToastHeader>
           <ToastBody>
-            <ImageType color={options.color} type={options.type} />
-            <ToastDescription>{options.description}</ToastDescription>
+            <ImageType color={color} type={type} />
+            <ToastDescription>{description}</ToastDescription>
           </ToastBody>
         </ToastWrapper>
       );

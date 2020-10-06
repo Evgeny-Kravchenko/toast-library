@@ -57,8 +57,12 @@ const ImageType = ({ type, color }) => {
 };
 
 ImageType.propTypes = {
-  type: PropTypes.string.isRequired,
+  type: PropTypes.string,
   color: PropTypes.string.isRequired,
+};
+
+ImageType.defaultType = {
+  type: 'unknown type',
 };
 
 export default ImageType;

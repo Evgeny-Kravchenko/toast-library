@@ -1,5 +1,13 @@
 import animations from '../animations';
-import { DEFAULT_BACKGROUND_COLOR, DEFAULT_DESCRIPTION, DEFAULT_TITLE } from '../constants';
+import {
+  DEFAULT_BACKGROUND_COLOR,
+  DEFAULT_DESCRIPTION,
+  DEFAULT_INDENT_X,
+  DEFAULT_INDENT_Y,
+  DEFAULT_POSITION_X,
+  DEFAULT_POSITION_Y,
+  DEFAULT_TITLE,
+} from '../constants';
 import { defaultThemes } from '../default-themes';
 import { DEFAULT_TEXT_COLOR } from '../default-themes/constants';
 import { createRef } from 'react';
@@ -7,27 +15,27 @@ import { createRef } from 'react';
 export default class Toasts {
   static _instance = null;
 
-  type = null;
+  type;
 
-  title = null;
+  title = DEFAULT_TITLE;
 
-  description = null;
+  description = DEFAULT_DESCRIPTION;
 
-  backgroundColor = null;
+  backgroundColor;
 
-  refToastContainer = null;
+  refToastContainer;
 
-  positionX = null;
+  positionX = DEFAULT_POSITION_X;
 
-  positionY = null;
+  positionY = DEFAULT_POSITION_Y;
 
-  showingDuration = null;
+  showingDuration;
 
-  indentX = null;
+  indentX = DEFAULT_INDENT_X;
 
-  indentY = null;
+  indentY = DEFAULT_INDENT_Y;
 
-  animation = null;
+  animation;
 
   arrayOfToasts = [];
 
@@ -98,24 +106,28 @@ export default class Toasts {
       showingDuration,
       setIsShown,
       arrayOfToasts,
+      title,
+      description,
+      backgroundColor = (type && defaultThemes[type].backgroundColor) || DEFAULT_BACKGROUND_COLOR,
     } = this;
+    const color = (type && defaultThemes[type].color) || DEFAULT_TEXT_COLOR;
     if (arrayOfToasts.length >= 3) {
       return;
     }
-    const title = this.title || DEFAULT_TITLE;
-    const description = this.description || DEFAULT_DESCRIPTION;
-    const backgroundColor =
-      this.backgroundColor ||
-      (type && defaultThemes[type].backgroundColor) ||
-      DEFAULT_BACKGROUND_COLOR;
-    const color = (type && defaultThemes[type].color) || DEFAULT_TEXT_COLOR;
     const position = { positionX, positionY };
     const indents = { indentX, indentY };
     if (this.arrayOfToasts.length !== 0) {
-      indents.indentY =
-        window.innerHeight -
-        this.arrayOfToasts[this.arrayOfToasts.length - 1].ref.current.offsetTop +
-        10;
+      if (positionY === 'bottom') {
+        indents.indentY =
+          window.innerHeight -
+          this.arrayOfToasts[this.arrayOfToasts.length - 1].ref.current.offsetTop +
+          10;
+      } else {
+        indents.indentY =
+          this.arrayOfToasts[this.arrayOfToasts.length - 1].ref.current.offsetTop +
+          this.arrayOfToasts[this.arrayOfToasts.length - 1].ref.current.offsetHeight +
+          10;
+      }
     }
 
     const animation = this.animation || animations.slide;
