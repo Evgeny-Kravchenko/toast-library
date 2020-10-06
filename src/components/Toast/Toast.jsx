@@ -37,7 +37,7 @@ export default class Toast extends Component {
   componentWillUnmount() {
     document.removeEventListener('click', this.onClose);
     document.removeEventListener('onanimationend', this.onAnimationEnd);
-    document.removeEventListener('onmousedown', this.onMousePress);
+    document.removeEventListener('onmousedown', this.onMouseDown);
   }
 
   onClose = () => {
@@ -59,13 +59,19 @@ export default class Toast extends Component {
     if (!isMouseButtonPressedDown) {
       document.addEventListener('mousemove', this.onMouseMove);
       document.addEventListener('mouseup', this.onMouseUp);
-      this.toastWrapperRef.current.parentElement.style.opacity = 0.3;
+      this.toastWrapperRef.current.parentElement.style.opacity = '0.3';
       this.setState({ startCoordinateX: event.pageX, isMouseButtonPressedDown: true });
     }
   };
 
   onMouseUp = () => {
-    this.toastWrapperRef.current.style.left = '10px';
+    const {
+      options: {
+        position: { positionX },
+        indents: { indentX },
+      },
+    } = this.state;
+    this.toastWrapperRef.current.style[positionX] = `${indentX || DEFAULT_INDENT_X}px`;
     this.toastWrapperRef.current.parentElement.style.opacity = `1`;
     document.removeEventListener('mousemove', this.onMouseMove);
     document.removeEventListener('mouseup', this.onMouseUp);
@@ -80,9 +86,15 @@ export default class Toast extends Component {
       },
     } = this.state;
     if (isMouseButtonPressedDown) {
-      this.toastWrapperRef.current.style[positionX] = `${
-        event.pageX - this.toastWrapperRef.current.offsetWidth / 2
-      }px`;
+      if (positionX === 'right') {
+        this.toastWrapperRef.current.style[positionX] = `${
+          window.innerWidth - event.pageX - this.toastWrapperRef.current.offsetWidth / 2
+        }px`;
+      } else {
+        this.toastWrapperRef.current.style[positionX] = `${
+          event.pageX - this.toastWrapperRef.current.offsetWidth / 2
+        }px`;
+      }
       this.isItNeededToHide(event.pageX);
     }
   };
