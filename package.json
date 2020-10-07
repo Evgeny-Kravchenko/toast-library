@@ -1,6 +1,6 @@
 {
-  "name": "toast-library",
-  "version": "1.0.0",
+  "name": "@evgeny-kravchenko/toast-library",
+  "version": "1.1.0",
   "description": "This is the test project",
   "main": "build/index.js",
   "module": "build/index.esm.js",
@@ -57,6 +57,7 @@
   },
   "dependencies": {
     "@storybook/addon-knobs": "^6.0.22",
-    "prop-types": "^15.7.2"
+    "prop-types": "^15.7.2",
+    "styled-components": "^5.2.0"
   }
 }
