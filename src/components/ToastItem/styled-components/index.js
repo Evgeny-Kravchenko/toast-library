@@ -11,6 +11,7 @@ export const ToastWrapper = styled.div`
   color: ${(props) => props.color};
   animation: ${(props) => props.animation} 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
   cursor: pointer;
+  opacity: ${(props) => props.opacity};
 `;
 
 export const ToastHeader = styled.header`

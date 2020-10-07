@@ -1,7 +1,7 @@
 import React, { useLayoutEffect, useRef } from 'react';
 
 import ErrorBoundary from 'src/components/ErrorBoundary';
-import Toast from '../Toast';
+import ToastList from '../ToastsList';
 import Toasts from '../../services';
 import Portal from '../Portal/Portal';
 
@@ -16,7 +16,7 @@ const ToastContainer = () => {
   return (
     <ErrorBoundary>
       <Portal>
-        <Toast ref={toastRef} />
+        <ToastList ref={toastRef} />
       </Portal>
     </ErrorBoundary>
   );

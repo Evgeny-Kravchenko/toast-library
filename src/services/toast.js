@@ -39,6 +39,8 @@ export default class Toasts {
 
   arrayOfToasts = [];
 
+  toastsRefs = [];
+
   constructor(refToastContainer) {
     if (Toasts._instance) {
       return Toasts._instance;
@@ -94,6 +96,10 @@ export default class Toasts {
   onDelete = (id) => {
     clearTimeout(this.arrayOfToasts.find((item) => item.id === id).timerId);
     this.arrayOfToasts = this.arrayOfToasts.filter((item) => item.id !== id);
+  };
+
+  _setToastsRef = (arr) => {
+    this.toastsRefs = arr;
   };
 
   async show() {
@@ -158,6 +164,7 @@ export default class Toasts {
       onDelete: this.onDelete,
       defaultIndentY: this.indentY,
       defaultIndentX: this.indentX,
+      setToastsRefs: this._setToastsRef,
     });
   }
 
