@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import ImageType from 'src/components/ImageType';
+import ProgressBar from 'src/components/ProgressBar';
 
 import {
   ToastWrapper,
@@ -11,7 +12,7 @@ import {
   ToastHeader,
 } from './styled-components';
 
-import { DEFAULT_INDENT_Y } from '../../constants';
+import { DEFAULT_INDENT_Y } from 'src/constants';
 
 export default class Toast extends Component {
   constructor(props) {
@@ -212,6 +213,7 @@ export default class Toast extends Component {
             <ImageType color={color} type={type} />
             <ToastDescription>{description}</ToastDescription>
           </ToastBody>
+          <ProgressBar />
         </ToastWrapper>
       );
     });
