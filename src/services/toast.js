@@ -160,4 +160,9 @@ export default class Toasts {
       defaultIndentX: this.indentX,
     });
   }
+
+  hide() {
+    const toastsIds = this.arrayOfToasts.map((toast) => toast.id);
+    toastsIds.forEach(async (id) => this.refToastContainer.current.onClose(id));
+  }
 }
