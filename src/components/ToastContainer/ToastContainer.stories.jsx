@@ -11,14 +11,15 @@ export default {
 export const Sandbox = () => {
   const onShow = () => {
     toastManager
-      .setAnimation('puff')
-      .setType('warning')
-      .setTitle('Something went wrong')
-      .setPosition('right', 'bottom')
-      .setIndent(20, 20)
+      .setPosition('right', 'top')
+      .setType('info')
+      .setTitle('It is very important information')
       .setDescription(
-        'Something went wrong and I assume that you must fix it. If you will not do it I will be disappointed'
+        'It is very important information and I think it is very important that you know about it.'
       )
+      .setIndent(5, 5)
+      .setColorOfBackground('rgba(0, 0, 0, 0.5)')
+      .setAnimation('puff')
       .show();
   };
   const onHide = () => {

@@ -4,7 +4,7 @@ export const ToastWrapper = styled.div`
   display: ${(props) => (props.position ? 'block' : 'none')};
   position: fixed;
   ${(props) => props.position.positionY}: ${(props) => props.indents.indentY}px;
-  ${(props) => props.position.positionX}: ${(props) => props.indents.indentY}px;
+  ${(props) => props.position.positionX}: ${(props) => props.indents.indentX}px;
   width: 400px;
   padding: 20px;
   background-color: ${(props) => props.backgroundColor};

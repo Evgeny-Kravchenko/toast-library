@@ -1,9 +1,9 @@
 import React, { useLayoutEffect, useRef } from 'react';
 
+import ErrorBoundary from 'src/components/ErrorBoundary';
 import Toast from '../Toast';
 import Toasts from '../../services';
 import Portal from '../Portal/Portal';
-import ErrorBoundary from 'src/components/ErrorBoundary';
 
 // eslint-disable-next-line import/no-mutable-exports
 let toastManager = null;
