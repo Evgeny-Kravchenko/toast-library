@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, forwardRef } from 'react';
+import React, { useState, useEffect, forwardRef } from 'react';
 import {
   CloseButton,
   Title,
@@ -7,18 +7,17 @@ import {
   ToastHeader,
   ToastWrapper,
 } from './styled-components';
-import ImageType from '../ImageType';
-import ProgressBar from '../ProgressBar';
+import ImageType from 'src/components/ImageType';
+import ProgressBar from 'src/components/ProgressBar';
 
 const ToastItem = forwardRef((props, ref) => {
-  const { onAnimationEnd, onClose, defaultIndentX } = props;
+  const { onHide, defaultIndentX } = props;
   const {
     animation,
     color,
     backgroundColor,
     position,
     indents,
-    isFade,
     title,
     description,
     type,
@@ -29,6 +28,8 @@ const ToastItem = forwardRef((props, ref) => {
 
   const [opacity, setOpacity] = useState('1');
   const [isMouseButtonPressedDown, setIsMouseButtonPressedDown] = useState(false);
+  const [isFade, setIsFade] = useState(false);
+  const [isAnimated, setIsAnimated] = useState(true);
 
   const unsubscribeFromEvents = () => {
     document.removeEventListener('mouseup', onMouseUp);
@@ -37,18 +38,35 @@ const ToastItem = forwardRef((props, ref) => {
 
   const isItNeededToHide = (x) => {
     if (x < 0 || x > window.innerWidth) {
+      unsubscribeFromEvents();
       setOpacity(1);
       setIsMouseButtonPressedDown(false);
       onClose(id);
-      unsubscribeFromEvents();
+    }
+  };
+
+  const onClose = () => {
+    setIsFade(true);
+  };
+
+  const onAnimationStart = () => {
+    setIsAnimated(true);
+  };
+
+  const onAnimationEnd = () => {
+    setIsAnimated(false);
+    if (isFade) {
+      onHide(id);
     }
   };
 
   const onMouseUp = () => {
-    unsubscribeFromEvents();
-    ref.current.style[positionX] = `${defaultIndentX}px`;
-    setIsMouseButtonPressedDown(false);
-    setOpacity('1');
+    if (isMouseButtonPressedDown) {
+      unsubscribeFromEvents();
+      ref.current.style[positionX] = `${defaultIndentX}px`;
+      setIsMouseButtonPressedDown(false);
+      setOpacity('1');
+    }
   };
 
   const onMouseMove = (event) => {
@@ -71,11 +89,17 @@ const ToastItem = forwardRef((props, ref) => {
     } else {
       ref.current.style[positionX] = `${defaultIndentX}px`;
     }
+    return () => {
+      unsubscribeFromEvents();
+      document.removeEventListener('mousedown', onMouseDown);
+    };
   }, [isMouseButtonPressedDown]);
 
   const onMouseDown = () => {
-    setIsMouseButtonPressedDown(true);
-    setOpacity('0.3 !important');
+    if (!isAnimated) {
+      setIsMouseButtonPressedDown(true);
+      setOpacity('0.3 !important');
+    }
   };
 
   let currentAnimation = null;
@@ -92,6 +116,7 @@ const ToastItem = forwardRef((props, ref) => {
       position={position}
       indents={indents}
       onAnimationEnd={() => onAnimationEnd(id, isFade)}
+      onAnimationStart={onAnimationStart}
       onMouseDown={onMouseDown}
       ref={ref}
     >

@@ -3,6 +3,7 @@ import React, { Component, createRef } from 'react';
 import { DEFAULT_INDENT_Y } from 'src/constants';
 
 import ToastItem from 'src/components/ToastItem';
+import Portal from 'src/components/Portal';
 
 export default class ToastList extends Component {
   constructor(props) {
@@ -23,29 +24,6 @@ export default class ToastList extends Component {
     this.setToastsRefs(arr);
   };
 
-  onClose = (id) => {
-    this.setState((prevState) => {
-      return {
-        arrayOfToasts: prevState.arrayOfToasts.map((toast) => {
-          if (toast.id === id) {
-            return {
-              ...toast,
-              isFade: true,
-              isMouseButtonPressedDown: false,
-            };
-          }
-          return toast;
-        }),
-      };
-    });
-  };
-
-  onAnimationEnd = (id, isFade) => {
-    if (isFade) {
-      this.hide(id);
-    }
-  };
-
   show(options) {
     const { toastsRefs } = this.state;
     const { arrayOfToasts, onDelete, defaultIndentY, defaultIndentX, setToastsRefs } = options;
@@ -61,7 +39,7 @@ export default class ToastList extends Component {
     });
   }
 
-  hide(id) {
+  hide = (id) => {
     const { defaultIndentY, toastsRefs } = this.state;
     this.onDeleteFromService(id);
     this.setState((prevState) => {
@@ -89,19 +67,20 @@ export default class ToastList extends Component {
         toastsRefs: prevState.toastsRefs.filter((item) => item.id !== id),
       };
     });
-  }
+  };
 
   render() {
     const { arrayOfToasts, defaultIndentX, toastsRefs } = this.state;
     return arrayOfToasts.map((toast, idx) => (
-      <ToastItem
-        key={toast.id}
-        toast={toast}
-        onAnimationEnd={this.onAnimationEnd}
-        onClose={this.onClose}
-        defaultIndentX={defaultIndentX}
-        ref={toastsRefs[idx].ref}
-      />
+      <Portal key={toast.id}>
+        <ToastItem
+          toast={toast}
+          onAnimationEnd={this.onAnimationEnd}
+          onHide={this.hide}
+          defaultIndentX={defaultIndentX}
+          ref={toastsRefs[idx].ref}
+        />
+      </Portal>
     ));
   }
 }

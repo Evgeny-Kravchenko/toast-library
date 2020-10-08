@@ -94,8 +94,26 @@ export default class Toasts {
   }
 
   onDelete = (id) => {
-    clearTimeout(this.arrayOfToasts.find((item) => item.id === id).timerId);
-    this.arrayOfToasts = this.arrayOfToasts.filter((item) => item.id !== id);
+    this.arrayOfToasts = this.arrayOfToasts
+      .filter((item) => item.id !== id)
+      .map((toast, idx) => {
+        if (idx !== 0) {
+          return {
+            ...toast,
+            indents: {
+              ...toast.indents,
+              indentY: this.toastsRefs[idx - 1].ref.current.offsetHeight + this.indentY + 10,
+            },
+          };
+        }
+        return {
+          ...toast,
+          indents: {
+            ...toast.indents,
+            indentY: this.indentY,
+          },
+        };
+      });
     this.toastsRefs = this.toastsRefs.filter((item) => item.id !== id);
   };
 
@@ -171,7 +189,9 @@ export default class Toasts {
 
   hide() {
     const toastsIds = this.arrayOfToasts.map((toast) => toast.id);
-    toastsIds.forEach((id) => this.refToastContainer.current.onClose(id));
+    this.arrayOfToasts.forEach((item) => {
+      this.refToastContainer.current.hide(item.id);
+    });
     this.toastsRefs = [];
   }
 }

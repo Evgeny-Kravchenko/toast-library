@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 
 export const ToastWrapper = styled.div`
-  display: ${(props) => (props.position ? 'block' : 'none')};
   position: fixed;
   ${(props) => props.position.positionY}: ${(props) => props.indents.indentY}px;
   ${(props) => props.position.positionX}: ${(props) => props.indents.indentX}px;
@@ -12,6 +11,7 @@ export const ToastWrapper = styled.div`
   animation: ${(props) => props.animation} 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
   cursor: pointer;
   opacity: ${(props) => props.opacity};
+  user-select: none;
 `;
 
 export const ToastHeader = styled.header`

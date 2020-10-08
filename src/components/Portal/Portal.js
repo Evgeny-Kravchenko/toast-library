@@ -1,16 +1,8 @@
-import { useLayoutEffect } from 'react';
 import { createPortal } from 'react-dom';
 import PropTypes from 'prop-types';
 
 function Portal(props) {
-  const el = document.createElement('div');
-  useLayoutEffect(() => {
-    document.body.appendChild(el);
-    return () => {
-      document.body.removeChild(el);
-    };
-  }, []);
-  return createPortal(props.children, el);
+  return createPortal(props.children, document.body);
 }
 
 Portal.propTypes = {
