@@ -159,7 +159,18 @@ export default class Toasts {
     const id = String(Math.round(Math.random() * 10e6));
     const timerId =
       showingDuration &&
-      setTimeout(() => this.refToastContainer.current.onClose(id), showingDuration);
+      setTimeout(
+        () =>
+          this.refToastContainer.current.setState({
+            arrayOfToasts: this.arrayOfToasts.map((item) => {
+              if (item.id === id) {
+                return { ...item, isFade: true };
+              }
+              return item;
+            }),
+          }),
+        showingDuration
+      );
     this.arrayOfToasts.push({
       type,
       backgroundColor,

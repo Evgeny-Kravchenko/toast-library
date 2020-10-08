@@ -22,6 +22,3 @@ export const StyledProgressBar = styled.progress`
   }
 `;
 
-export const ProgressBarWrapper = styled.div`
-  padding-top: 10px;
-`;

@@ -25,6 +25,7 @@ const ToastItem = forwardRef((props, ref) => {
     type,
     id,
     isFade,
+    showingDuration,
   } = props.toast;
   const { positionX } = position;
 
@@ -134,9 +135,9 @@ const ToastItem = forwardRef((props, ref) => {
       </ToastHeader>
       <ToastBody>
         <ImageType color={color} type={type} />
-        <ToastDescription>{description}</ToastDescription>
+        <ToastDescription showingDuration={showingDuration}>{description}</ToastDescription>
       </ToastBody>
-      <ProgressBar />
+      {showingDuration && <ProgressBar showingDuration={showingDuration} />}
     </ToastWrapper>
   );
 });
