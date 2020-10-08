@@ -96,6 +96,7 @@ export default class Toasts {
   onDelete = (id) => {
     clearTimeout(this.arrayOfToasts.find((item) => item.id === id).timerId);
     this.arrayOfToasts = this.arrayOfToasts.filter((item) => item.id !== id);
+    this.toastsRefs = this.toastsRefs.filter((item) => item.id !== id);
   };
 
   _setToastsRef = (arr) => {
@@ -126,12 +127,12 @@ export default class Toasts {
       if (positionY === 'bottom') {
         indents.indentY =
           window.innerHeight -
-          this.arrayOfToasts[this.arrayOfToasts.length - 1].ref.current.offsetTop +
+          this.toastsRefs[this.toastsRefs.length - 1].ref.current.offsetTop +
           10;
       } else {
         indents.indentY =
-          this.arrayOfToasts[this.arrayOfToasts.length - 1].ref.current.offsetTop +
-          this.arrayOfToasts[this.arrayOfToasts.length - 1].ref.current.offsetHeight +
+          this.toastsRefs[this.toastsRefs.length - 1].ref.current.offsetTop +
+          this.toastsRefs[this.toastsRefs.length - 1].ref.current.offsetHeight +
           10;
       }
     }
@@ -170,6 +171,7 @@ export default class Toasts {
 
   hide() {
     const toastsIds = this.arrayOfToasts.map((toast) => toast.id);
-    toastsIds.forEach(async (id) => this.refToastContainer.current.onClose(id));
+    toastsIds.forEach((id) => this.refToastContainer.current.onClose(id));
+    this.toastsRefs = [];
   }
 }

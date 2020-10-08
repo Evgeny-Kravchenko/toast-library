@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, forwardRef } from 'react';
 import {
   CloseButton,
   Title,
@@ -10,7 +10,7 @@ import {
 import ImageType from '../ImageType';
 import ProgressBar from '../ProgressBar';
 
-const ToastItem = (props) => {
+const ToastItem = forwardRef((props, ref) => {
   const { onAnimationEnd, onClose, defaultIndentX } = props;
   const {
     animation,
@@ -29,7 +29,6 @@ const ToastItem = (props) => {
 
   const [opacity, setOpacity] = useState('1');
   const [isMouseButtonPressedDown, setIsMouseButtonPressedDown] = useState(false);
-  const ref = useRef(null);
 
   const unsubscribeFromEvents = () => {
     document.removeEventListener('mouseup', onMouseUp);
@@ -115,6 +114,6 @@ const ToastItem = (props) => {
       <ProgressBar />
     </ToastWrapper>
   );
-};
+});
 
 export default ToastItem;

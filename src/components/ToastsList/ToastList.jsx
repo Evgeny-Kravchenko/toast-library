@@ -14,36 +14,9 @@ export default class ToastList extends Component {
     };
   }
 
-  componentDidMount() {
-    this.setState(
-      (prevState) => ({
-        toastsRefs: Array(prevState.arrayOfToasts.length)
-          .fill(null)
-          .map((_, idx) => prevState.toastsRefs[idx] || createRef()),
-      }),
-      () => console.log(this.state.toastsRefs)
-    );
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    if (
-      this.state.arrayOfToasts.length === nextState.arrayOfToasts.length &&
-      this.state.toastsRefs.length === nextState.toastsRefs.length
-    ) {
-      return false;
-    }
-    return true;
-  }
-
-  componentDidUpdate(prevProps, prevState, snapshot) {
-    this.setState(
-      (prevState) => ({
-        toastsRefs: Array(prevState.arrayOfToasts.length)
-          .fill(null)
-          .map((_, idx) => prevState.toastsRefs[idx] || createRef()),
-      }),
-      () => console.log(this.state.toastsRefs)
-    );
+  componentDidUpdate() {
+    const { toastsRefs } = this.state;
+    this.setToastsRefs(toastsRefs);
   }
 
   setToastsRefs = (arr) => {
@@ -63,7 +36,6 @@ export default class ToastList extends Component {
           }
           return toast;
         }),
-        currentPressedToast: null,
       };
     });
   };
@@ -75,26 +47,34 @@ export default class ToastList extends Component {
   };
 
   show(options) {
+    const { toastsRefs } = this.state;
     const { arrayOfToasts, onDelete, defaultIndentY, defaultIndentX, setToastsRefs } = options;
     this.onDeleteFromService = onDelete;
     this.setToastsRefs = setToastsRefs;
-    this.setState({ arrayOfToasts, defaultIndentY, defaultIndentX });
+    this.setState({
+      arrayOfToasts,
+      defaultIndentY,
+      defaultIndentX,
+      toastsRefs: Array(arrayOfToasts.length)
+        .fill(null)
+        .map((i, idx) => ({ ref: (i && i.ref) || createRef(), id: arrayOfToasts[idx].id })),
+    });
   }
 
   hide(id) {
-    const { defaultIndentY } = this.state;
+    const { defaultIndentY, toastsRefs } = this.state;
     this.onDeleteFromService(id);
     this.setState((prevState) => {
       return {
         arrayOfToasts: prevState.arrayOfToasts
           .filter((toast) => toast.id !== id)
-          .map((toast, idx, arr) => {
+          .map((toast, idx) => {
             if (idx !== 0) {
               return {
                 ...toast,
                 indents: {
                   ...toast.indents,
-                  indentY: arr[idx - 1].ref.current.offsetHeight + defaultIndentY + 10,
+                  indentY: toastsRefs[idx - 1].ref.current.offsetHeight + defaultIndentY + 10,
                 },
               };
             }
@@ -106,6 +86,7 @@ export default class ToastList extends Component {
               },
             };
           }),
+        toastsRefs: prevState.toastsRefs.filter((item) => item.id !== id),
       };
     });
   }
@@ -119,7 +100,7 @@ export default class ToastList extends Component {
         onAnimationEnd={this.onAnimationEnd}
         onClose={this.onClose}
         defaultIndentX={defaultIndentX}
-        ref={toastsRefs[idx]}
+        ref={toastsRefs[idx].ref}
       />
     ));
   }
