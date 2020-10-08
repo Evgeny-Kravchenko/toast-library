@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
-import { CloseButton } from 'src/components/Toast/styled-components';
+import { CloseButton } from 'src/components/ToastItem/styled-components';
 
 const ErrorIndicatorWrapper = styled.div`
   display: flex;

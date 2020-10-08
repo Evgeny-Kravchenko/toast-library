@@ -11,7 +11,7 @@ export default {
 export const Sandbox = () => {
   const onShow = () => {
     toastManager
-      .setPosition('right', 'top')
+      .setPosition('right', 'bottom')
       .setType('info')
       .setTitle('It is very important information')
       .setDescription(
