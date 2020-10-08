@@ -57,7 +57,7 @@ export const ToastBody = styled.div`
 
 export const ToastDescription = styled.p`
   margin: 0 20px;
-  padding-bottom: ${(props) => props.showingDuration ? '20' : '10'}px;
+  padding-bottom: ${(props) => (!props.showingDuration ? '20' : '10')}px;
   flex-grow: 1;
   text-align: justify;
   user-select: none;

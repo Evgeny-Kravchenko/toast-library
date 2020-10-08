@@ -1,5 +1,6 @@
 import React, { useRef, useLayoutEffect } from 'react';
-import { StyledProgressBar } from './styled-components';
+import PropTypes from 'prop-types';
+import StyledProgressBar from './styled-components';
 
 function ProgressBar({ showingDuration }) {
   const ref = useRef();
@@ -19,5 +20,9 @@ function ProgressBar({ showingDuration }) {
 
   return <StyledProgressBar value={showingDuration} max={showingDuration} ref={ref} />;
 }
+
+ProgressBar.propTypes = {
+  showingDuration: PropTypes.number.isRequired,
+};
 
 export default ProgressBar;

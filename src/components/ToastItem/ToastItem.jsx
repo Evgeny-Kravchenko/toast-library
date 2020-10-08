@@ -168,6 +168,7 @@ ToastItem.propTypes = {
     type: PropTypes.string.isRequired,
     id: PropTypes.string.isRequired,
     isFade: PropTypes.bool.isRequired,
+    showingDuration: PropTypes.number.isRequired,
   }).isRequired,
 };
 

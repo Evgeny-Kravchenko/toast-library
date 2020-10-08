@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const StyledProgressBar = styled.progress`
+const StyledProgressBar = styled.progress`
   width: 100%;
   height: 5px;
   margin-bottom: -1px;
@@ -22,3 +22,4 @@ export const StyledProgressBar = styled.progress`
   }
 `;
 
+export default StyledProgressBar;
