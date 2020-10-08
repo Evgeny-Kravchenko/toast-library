@@ -1,4 +1,8 @@
 import React, { useState, useEffect, forwardRef } from 'react';
+import PropTypes from 'prop-types';
+
+import ImageType from 'src/components/ImageType';
+import ProgressBar from 'src/components/ProgressBar';
 import {
   CloseButton,
   Title,
@@ -7,11 +11,9 @@ import {
   ToastHeader,
   ToastWrapper,
 } from './styled-components';
-import ImageType from 'src/components/ImageType';
-import ProgressBar from 'src/components/ProgressBar';
 
 const ToastItem = forwardRef((props, ref) => {
-  const { onHide, defaultIndentX } = props;
+  const { onHide, defaultIndentX, setIsFadeForOneToasts } = props;
   const {
     animation,
     color,
@@ -22,50 +24,44 @@ const ToastItem = forwardRef((props, ref) => {
     description,
     type,
     id,
+    isFade,
   } = props.toast;
-
   const { positionX } = position;
 
   const [opacity, setOpacity] = useState('1');
   const [isMouseButtonPressedDown, setIsMouseButtonPressedDown] = useState(false);
-  const [isFade, setIsFade] = useState(false);
   const [isAnimated, setIsAnimated] = useState(true);
+
+  const onMouseDown = () => {
+    if (!isAnimated) {
+      setIsMouseButtonPressedDown(true);
+      setOpacity('0.3 !important');
+    }
+  };
+
+  const onMouseUp = () => {
+    if (isMouseButtonPressedDown) {
+      ref.current.style[positionX] = `${defaultIndentX}px`;
+      setIsMouseButtonPressedDown(false);
+      setOpacity('1');
+    }
+  };
 
   const unsubscribeFromEvents = () => {
     document.removeEventListener('mouseup', onMouseUp);
     document.removeEventListener('mousemove', onMouseMove);
   };
 
+  const onClose = () => {
+    unsubscribeFromEvents();
+    setIsFadeForOneToasts(id, true);
+  };
+
   const isItNeededToHide = (x) => {
     if (x < 0 || x > window.innerWidth) {
-      unsubscribeFromEvents();
-      setOpacity(1);
+      setOpacity('1');
       setIsMouseButtonPressedDown(false);
       onClose(id);
-    }
-  };
-
-  const onClose = () => {
-    setIsFade(true);
-  };
-
-  const onAnimationStart = () => {
-    setIsAnimated(true);
-  };
-
-  const onAnimationEnd = () => {
-    setIsAnimated(false);
-    if (isFade) {
-      onHide(id);
-    }
-  };
-
-  const onMouseUp = () => {
-    if (isMouseButtonPressedDown) {
-      unsubscribeFromEvents();
-      ref.current.style[positionX] = `${defaultIndentX}px`;
-      setIsMouseButtonPressedDown(false);
-      setOpacity('1');
     }
   };
 
@@ -82,6 +78,17 @@ const ToastItem = forwardRef((props, ref) => {
     }
   };
 
+  const onAnimationStart = () => {
+    setIsAnimated(true);
+  };
+
+  const onAnimationEnd = () => {
+    setIsAnimated(false);
+    if (isFade) {
+      onHide(id);
+    }
+  };
+
   useEffect(() => {
     if (isMouseButtonPressedDown) {
       document.addEventListener('mouseup', onMouseUp);
@@ -94,13 +101,6 @@ const ToastItem = forwardRef((props, ref) => {
       document.removeEventListener('mousedown', onMouseDown);
     };
   }, [isMouseButtonPressedDown]);
-
-  const onMouseDown = () => {
-    if (!isAnimated) {
-      setIsMouseButtonPressedDown(true);
-      setOpacity('0.3 !important');
-    }
-  };
 
   let currentAnimation = null;
   if (animation) {
@@ -140,5 +140,34 @@ const ToastItem = forwardRef((props, ref) => {
     </ToastWrapper>
   );
 });
+
+ToastItem.displayName = 'ToastItem';
+
+ToastItem.propTypes = {
+  onHide: PropTypes.func.isRequired,
+  defaultIndentX: PropTypes.number.isRequired,
+  setIsFadeForOneToasts: PropTypes.func.isRequired,
+  toast: PropTypes.shape({
+    animation: PropTypes.shape({
+      appearance: PropTypes.instanceOf(Object).isRequired,
+      disappearance: PropTypes.instanceOf(Object).isRequired,
+    }),
+    color: PropTypes.string.isRequired,
+    backgroundColor: PropTypes.string.isRequired,
+    position: PropTypes.shape({
+      positionX: PropTypes.string.isRequired,
+      positionY: PropTypes.string.isRequired,
+    }),
+    indents: PropTypes.shape({
+      indentX: PropTypes.number.isRequired,
+      indentY: PropTypes.number.isRequired,
+    }),
+    title: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+    type: PropTypes.string.isRequired,
+    id: PropTypes.string.isRequired,
+    isFade: PropTypes.bool.isRequired,
+  }).isRequired,
+};
 
 export default ToastItem;

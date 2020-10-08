@@ -188,10 +188,10 @@ export default class Toasts {
   }
 
   hide() {
-    const toastsIds = this.arrayOfToasts.map((toast) => toast.id);
-    this.arrayOfToasts.forEach((item) => {
-      this.refToastContainer.current.hide(item.id);
+    this.refToastContainer.current.setState({
+      arrayOfToasts: this.arrayOfToasts.map((item) => ({ ...item, isFade: true })),
     });
+    this.arrayOfToasts = [];
     this.toastsRefs = [];
   }
 }

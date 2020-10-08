@@ -24,20 +24,19 @@ export default class ToastList extends Component {
     this.setToastsRefs(arr);
   };
 
-  show(options) {
-    const { toastsRefs } = this.state;
-    const { arrayOfToasts, onDelete, defaultIndentY, defaultIndentX, setToastsRefs } = options;
-    this.onDeleteFromService = onDelete;
-    this.setToastsRefs = setToastsRefs;
-    this.setState({
-      arrayOfToasts,
-      defaultIndentY,
-      defaultIndentX,
-      toastsRefs: Array(arrayOfToasts.length)
-        .fill(null)
-        .map((i, idx) => ({ ref: (i && i.ref) || createRef(), id: arrayOfToasts[idx].id })),
-    });
-  }
+  setIsFadeForOneToasts = (id, value) => {
+    this.setState((prevState) => ({
+      arrayOfToasts: prevState.arrayOfToasts.map((item) => {
+        if (item.id === id) {
+          return {
+            ...item,
+            isFade: value,
+          };
+        }
+        return item;
+      }),
+    }));
+  };
 
   hide = (id) => {
     const { defaultIndentY, toastsRefs } = this.state;
@@ -69,6 +68,20 @@ export default class ToastList extends Component {
     });
   };
 
+  show(options) {
+    const { arrayOfToasts, onDelete, defaultIndentY, defaultIndentX, setToastsRefs } = options;
+    this.onDeleteFromService = onDelete;
+    this.setToastsRefs = setToastsRefs;
+    this.setState({
+      arrayOfToasts,
+      defaultIndentY,
+      defaultIndentX,
+      toastsRefs: Array(arrayOfToasts.length)
+        .fill(null)
+        .map((i, idx) => ({ ref: (i && i.ref) || createRef(), id: arrayOfToasts[idx].id })),
+    });
+  }
+
   render() {
     const { arrayOfToasts, defaultIndentX, toastsRefs } = this.state;
     return arrayOfToasts.map((toast, idx) => (
@@ -79,6 +92,7 @@ export default class ToastList extends Component {
           onHide={this.hide}
           defaultIndentX={defaultIndentX}
           ref={toastsRefs[idx].ref}
+          setIsFadeForOneToasts={this.setIsFadeForOneToasts}
         />
       </Portal>
     ));
