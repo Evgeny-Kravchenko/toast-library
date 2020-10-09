@@ -22,6 +22,6 @@ jobs:
           DEFAULT_BRANCH: master
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   finish-actions:
-      - name: Message of completing GitHub Actions
-        needs: [eslint_checking]
-        run: echo "Everything is good! All steps is completed successfully."
+    name: Message of completing GitHub Actions
+    needs: [eslint_checking]
+    run: echo "Everything is good! All steps is completed successfully."
