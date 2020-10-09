@@ -22,6 +22,8 @@
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
     "no-underscore-dangle": "off",
     "react/jsx-one-expression-per-line": "off",
-    "import/no-unresolved": "off"
+    "import/no-unresolved": "off",
+    "no-use-before-define": "off",
+    "no-param-reassign": "off"
   }
 }

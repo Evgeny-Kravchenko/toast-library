@@ -39,6 +39,8 @@ export default class Toasts {
 
   arrayOfToasts = [];
 
+  toastsRefs = [];
+
   constructor(refToastContainer) {
     if (Toasts._instance) {
       return Toasts._instance;
@@ -92,8 +94,31 @@ export default class Toasts {
   }
 
   onDelete = (id) => {
-    clearTimeout(this.arrayOfToasts.find((item) => item.id === id).timerId);
-    this.arrayOfToasts = this.arrayOfToasts.filter((item) => item.id !== id);
+    this.arrayOfToasts = this.arrayOfToasts
+      .filter((item) => item.id !== id)
+      .map((toast, idx) => {
+        if (idx !== 0) {
+          return {
+            ...toast,
+            indents: {
+              ...toast.indents,
+              indentY: this.toastsRefs[idx - 1].ref.current.offsetHeight + this.indentY + 10,
+            },
+          };
+        }
+        return {
+          ...toast,
+          indents: {
+            ...toast.indents,
+            indentY: this.indentY,
+          },
+        };
+      });
+    this.toastsRefs = this.toastsRefs.filter((item) => item.id !== id);
+  };
+
+  _setToastsRef = (arr) => {
+    this.toastsRefs = arr;
   };
 
   async show() {
@@ -120,12 +145,12 @@ export default class Toasts {
       if (positionY === 'bottom') {
         indents.indentY =
           window.innerHeight -
-          this.arrayOfToasts[this.arrayOfToasts.length - 1].ref.current.offsetTop +
+          this.toastsRefs[this.toastsRefs.length - 1].ref.current.offsetTop +
           10;
       } else {
         indents.indentY =
-          this.arrayOfToasts[this.arrayOfToasts.length - 1].ref.current.offsetTop +
-          this.arrayOfToasts[this.arrayOfToasts.length - 1].ref.current.offsetHeight +
+          this.toastsRefs[this.toastsRefs.length - 1].ref.current.offsetTop +
+          this.toastsRefs[this.toastsRefs.length - 1].ref.current.offsetHeight +
           10;
       }
     }
@@ -134,7 +159,10 @@ export default class Toasts {
     const id = String(Math.round(Math.random() * 10e6));
     const timerId =
       showingDuration &&
-      setTimeout(() => this.refToastContainer.current.onClose(id), showingDuration);
+      setTimeout(() => {
+        this.refToastContainer.current.setIsFadeForOneToasts(id, true);
+        clearTimeout(timerId);
+      }, showingDuration);
     this.arrayOfToasts.push({
       type,
       backgroundColor,
@@ -158,11 +186,15 @@ export default class Toasts {
       onDelete: this.onDelete,
       defaultIndentY: this.indentY,
       defaultIndentX: this.indentX,
+      setToastsRefs: this._setToastsRef,
     });
   }
 
   hide() {
-    const toastsIds = this.arrayOfToasts.map((toast) => toast.id);
-    toastsIds.forEach(async (id) => this.refToastContainer.current.onClose(id));
+    this.refToastContainer.current.setState({
+      arrayOfToasts: this.arrayOfToasts.map((item) => ({ ...item, isFade: true })),
+    });
+    this.arrayOfToasts = [];
+    this.toastsRefs = [];
   }
 }
