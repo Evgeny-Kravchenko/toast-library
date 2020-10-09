@@ -11,7 +11,7 @@ jobs:
     name: Lint code base
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Git clone my repo
         uses: actions/checkout@v2
 
       - name: Run code eslint lint
