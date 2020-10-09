@@ -1,4 +1,5 @@
 name: Node continuous integration
+
   on:
     pull_request:
       branches: [master]
@@ -10,7 +11,6 @@ name: Node continuous integration
       steps:
         - name: Checkout code
           uses: actions/checkout@v2
-          run: npm ci
 
         - name: Run code base lint
           uses: github/super-linter@v3
