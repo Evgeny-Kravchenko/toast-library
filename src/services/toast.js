@@ -41,6 +41,13 @@ export default class Toasts {
 
   toastsRefs = [];
 
+  lastPositionsOfToastsInTheDifferentPartsOfWindow = {
+    'left-bottom': 5,
+    'left-top': 5,
+    'right-bottom': 5,
+    'right-top': 5,
+  };
+
   constructor(refToastContainer) {
     if (Toasts._instance) {
       return Toasts._instance;
@@ -94,8 +101,14 @@ export default class Toasts {
   }
 
   onDelete = (id) => {
+    let positionsString = null;
     this.arrayOfToasts = this.arrayOfToasts
-      .filter((item) => item.id !== id)
+      .filter((item) => {
+        if (item.id === id) {
+          positionsString = Object.values(item.position).join('-');
+        }
+        return item.id !== id;
+      })
       .map((toast, idx) => {
         if (idx !== 0) {
           return {
@@ -114,12 +127,26 @@ export default class Toasts {
           },
         };
       });
+    console.log(positionsString);
     this.toastsRefs = this.toastsRefs.filter((item) => item.id !== id);
   };
 
   _setToastsRef = (arr) => {
     this.toastsRefs = arr;
   };
+
+  _setLastPositionOfToast = (positionX, positionY, id) => {
+    const lastPosition = this.lastPositionsOfToastsInTheDifferentPartsOfWindow[
+      `${positionX}-${positionY}`
+    ];
+    const ref = this.toastsRefs.find((item) => item.id === id).ref;
+    this.lastPositionsOfToastsInTheDifferentPartsOfWindow[`${positionX}-${positionY}`] =
+      lastPosition + ref.current.offsetHeight + 10;
+  };
+
+  _getLastPositionToast(positionX, positionY) {
+    return this.lastPositionsOfToastsInTheDifferentPartsOfWindow[`${positionX}-${positionY}`];
+  }
 
   async show() {
     const {
@@ -141,27 +168,10 @@ export default class Toasts {
     }
     const position = { positionX, positionY };
     const indents = { indentX, indentY };
-    if (
-      this.arrayOfToasts.length !== 0 &&
-      this.arrayOfToasts[this.arrayOfToasts.length - 1].position.positionY === positionY &&
-      this.arrayOfToasts[this.arrayOfToasts.length - 1].position.positionX === positionX
-    ) {
-      console.log(1);
-      if (positionY === 'bottom') {
-        indents.indentY =
-          window.innerHeight -
-          this.toastsRefs[this.toastsRefs.length - 1].ref.current.offsetTop +
-          10;
-      } else {
-        indents.indentY =
-          this.toastsRefs[this.toastsRefs.length - 1].ref.current.offsetTop +
-          this.toastsRefs[this.toastsRefs.length - 1].ref.current.offsetHeight +
-          10;
-      }
-    }
+    const id = String(Math.round(Math.random() * 10e6));
+    indents.indentY = this._getLastPositionToast(positionX, positionY) || indentY;
 
     const animation = this.animation || animations.slide;
-    const id = String(Math.round(Math.random() * 10e6));
     const timerId =
       showingDuration &&
       setTimeout(() => {
@@ -193,6 +203,8 @@ export default class Toasts {
       defaultIndentX: this.indentX,
       setToastsRefs: this._setToastsRef,
     });
+
+    this._setLastPositionOfToast(positionX, positionY, id);
   }
 
   hide() {
@@ -204,5 +216,11 @@ export default class Toasts {
     });
     this.arrayOfToasts = [];
     this.toastsRefs = [];
+    this.lastPositionsOfToastsInTheDifferentPartsOfWindow = {
+      'left-bottom': 5,
+      'left-top': 5,
+      'right-bottom': 5,
+      'right-top': 5,
+    };
   }
 }
