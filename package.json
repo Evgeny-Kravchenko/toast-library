@@ -53,7 +53,8 @@
     "build": "cross-env NODE_ENV=production rollup -c",
     "storybook": "start-storybook -p 6006 -c ./storybook",
     "storybook:export": "build-storybook -c ./storybook",
-    "lint": "eslint --ext .js --ext .jsx src/ --fix"
+    "lint": "eslint --ext .js --ext .jsx src/ --fix",
+    "eslint:github-action": "eslint --ext .js --ext .jsx src/"
   },
   "dependencies": {
     "@storybook/addon-knobs": "^6.0.22",
