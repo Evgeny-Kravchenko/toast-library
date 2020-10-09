@@ -141,7 +141,12 @@ export default class Toasts {
     }
     const position = { positionX, positionY };
     const indents = { indentX, indentY };
-    if (this.arrayOfToasts.length !== 0) {
+    if (
+      this.arrayOfToasts.length !== 0 &&
+      this.arrayOfToasts[this.arrayOfToasts.length - 1].position.positionY === positionY &&
+      this.arrayOfToasts[this.arrayOfToasts.length - 1].position.positionX === positionX
+    ) {
+      console.log(1);
       if (positionY === 'bottom') {
         indents.indentY =
           window.innerHeight -
@@ -191,6 +196,9 @@ export default class Toasts {
   }
 
   hide() {
+    if (this.arrayOfToasts.length === 0) {
+      return;
+    }
     this.refToastContainer.current.setState({
       arrayOfToasts: this.arrayOfToasts.map((item) => ({ ...item, isFade: true })),
     });

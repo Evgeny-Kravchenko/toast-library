@@ -9,9 +9,9 @@ export default {
 };
 
 export const Sandbox = () => {
-  const onShow = () => {
+  const onShow = (positionX, positionY) => {
     toastManager
-      .setPosition('right', 'bottom')
+      .setPosition(positionX, positionY)
       .setType('info')
       .setTitle('It is very important information')
       .setDescription(
@@ -29,12 +29,16 @@ export const Sandbox = () => {
   return (
     <>
       <ToastContainer />
-      <button type="button" onClick={onShow}>
-        Show
+      <button type="button" onClick={() => onShow('left', 'bottom')}>
+        Show button 1
       </button>
-      <button type="button" onClick={onHide}>
-        Hide
+      <button type="button" onClick={() => onShow('right', 'top')}>
+        Show button 2
       </button>
+      <button type="button" onClick={() => onShow('right', 'bottom')}>
+        Show button 3
+      </button>
+      <button onClick={onHide}>Hide all buttons</button>
     </>
   );
 };
