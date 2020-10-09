@@ -30,6 +30,8 @@ jobs:
         uses: actions/checkout@v2
       - name: Publish
         run: npm publish
+        env:
+          NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
   finish-actions:
     name: Message of completing GitHub Actions
     runs-on: ubuntu-latest
