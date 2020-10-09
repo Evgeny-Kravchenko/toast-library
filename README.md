@@ -1,5 +1,9 @@
 # toast-library
 
+Version 1.2.0
+
+- add showing duration progress bar of toast
+
 This is a toast library. You can easily create notifications using this library.
 
 To use this package you have to create file .npmrc and put following stuff in it:
@@ -68,3 +72,4 @@ It is possible to show up to three toasts at the same time.
             .setColorOfBackground('rgba(0, 0, 0, 0.5)')
             .setAnimation('puff')
             .show();
+            
