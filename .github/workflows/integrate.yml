@@ -1,4 +1,4 @@
-name: Node continuous integration
+name: GitHub_Actions
 
 on:
   pull_request:
@@ -7,7 +7,7 @@ on:
     branches: [master]
 
 jobs:
-  pull_request:
+  eslint_checking:
     name: Lint code base
     runs-on: ubuntu-latest
     steps:
@@ -21,3 +21,7 @@ jobs:
         env:
           DEFAULT_BRANCH: master
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  finish-actions:
+    - name: 'Message of completing GitHub Actions'
+      needs: [eslint_checking]
+      run: echo "Everything is good! All steps is completed successfully."
