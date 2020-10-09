@@ -24,12 +24,13 @@ jobs:
   publish_project_to_github_packages:
     name: Github packages
     runs-on: ubuntu-latest
+    needs: [eslint_checking]
     steps:
       - name: Publish
         run: npm publish
   finish-actions:
     name: Message of completing GitHub Actions
     runs-on: ubuntu-latest
-    needs: [eslint_checking]
+    needs: [eslint_checking, publish_project_to_github_packages]
     steps:
       - run: echo "Everything is good! All steps is completed successfully."
