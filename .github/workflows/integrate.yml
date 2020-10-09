@@ -21,6 +21,12 @@ jobs:
         env:
           DEFAULT_BRANCH: master
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  publish_project_to_github_packages:
+    name: Github packages
+    runs-on: ubuntu-latest
+    steps:
+      - name: Publish
+        run: npm publish
   finish-actions:
     name: Message of completing GitHub Actions
     runs-on: ubuntu-latest
