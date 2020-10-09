@@ -23,5 +23,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   finish-actions:
     name: Message of completing GitHub Actions
+    runs-on: ubuntu-latest
     needs: [eslint_checking]
-    run: echo "Everything is good! All steps is completed successfully."
+    steps:
+      - run: echo "Everything is good! All steps is completed successfully."
