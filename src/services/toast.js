@@ -101,33 +101,33 @@ export default class Toasts {
   }
 
   onDelete = (id) => {
-    let positionsString = null;
+    const { ref } = this.toastsRefs.find((item) => item.id === id);
+    const deletedToast = this.arrayOfToasts.find((item) => item.id === id);
+    const { positionX, positionY } = deletedToast.position;
+    const positionOfRemovingVideo = `${positionX}-${positionY}`;
+    let indexOfRemovingVideo = null;
     this.arrayOfToasts = this.arrayOfToasts
-      .filter((item) => {
-        if (item.id === id) {
-          positionsString = Object.values(item.position).join('-');
+      .filter((toast, idx) => {
+        if (toast.id !== id) {
+          return true;
         }
-        return item.id !== id;
+        indexOfRemovingVideo = idx;
+        return false;
       })
       .map((toast, idx) => {
-        if (idx !== 0) {
+        const { positionX: x, positionY: y } = toast.position;
+        if (positionOfRemovingVideo === `${x}-${y}` && idx + 1 > indexOfRemovingVideo) {
           return {
             ...toast,
             indents: {
               ...toast.indents,
-              indentY: this.toastsRefs[idx - 1].ref.current.offsetHeight + this.indentY + 10,
+              indentY: toast.indents.indentY - ref.current.offsetHeight - 10,
             },
           };
         }
-        return {
-          ...toast,
-          indents: {
-            ...toast.indents,
-            indentY: this.indentY,
-          },
-        };
+        return toast;
       });
-    console.log(positionsString);
+    this._setLastPositionOfToast(positionX, positionY, id, true);
     this.toastsRefs = this.toastsRefs.filter((item) => item.id !== id);
   };
 
@@ -135,18 +135,27 @@ export default class Toasts {
     this.toastsRefs = arr;
   };
 
-  _setLastPositionOfToast = (positionX, positionY, id) => {
+  _setLastPositionOfToast = (positionX, positionY, id, isDelete) => {
     const lastPosition = this.lastPositionsOfToastsInTheDifferentPartsOfWindow[
       `${positionX}-${positionY}`
     ];
-    const ref = this.toastsRefs.find((item) => item.id === id).ref;
-    this.lastPositionsOfToastsInTheDifferentPartsOfWindow[`${positionX}-${positionY}`] =
-      lastPosition + ref.current.offsetHeight + 10;
+    const { ref } = this.toastsRefs.find((item) => item.id === id);
+    if (isDelete) {
+      this.lastPositionsOfToastsInTheDifferentPartsOfWindow[`${positionX}-${positionY}`] =
+        lastPosition - ref.current.offsetHeight - 10;
+    } else {
+      this.lastPositionsOfToastsInTheDifferentPartsOfWindow[`${positionX}-${positionY}`] =
+        lastPosition + ref.current.offsetHeight + 10;
+    }
   };
 
-  _getLastPositionToast(positionX, positionY) {
+  _getLastPositionToast = (positionX, positionY) => {
     return this.lastPositionsOfToastsInTheDifferentPartsOfWindow[`${positionX}-${positionY}`];
-  }
+  };
+
+  _getNewArrayOfToastsFromService = () => {
+    return this.arrayOfToasts;
+  };
 
   async show() {
     const {
@@ -202,6 +211,7 @@ export default class Toasts {
       defaultIndentY: this.indentY,
       defaultIndentX: this.indentX,
       setToastsRefs: this._setToastsRef,
+      getNewArrayOfToastsFromService: this._getNewArrayOfToastsFromService,
     });
 
     this._setLastPositionOfToast(positionX, positionY, id);
