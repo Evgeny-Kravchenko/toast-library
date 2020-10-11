@@ -194,6 +194,15 @@ export default class Toasts {
     const timerId =
       showingDuration &&
       setTimeout(() => {
+        this.arrayOfToasts = this.arrayOfToasts.map((item) => {
+          if (item.id === id) {
+            return {
+              ...item,
+              isFade: true,
+            };
+          }
+          return item;
+        });
         this.refToastContainer.current.setIsFadeForOneToasts(id, true);
         clearTimeout(timerId);
       }, showingDuration);

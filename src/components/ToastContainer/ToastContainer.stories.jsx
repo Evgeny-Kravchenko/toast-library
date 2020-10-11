@@ -20,7 +20,7 @@ export const Sandbox = () => {
       .setIndent(20, 20)
       .setColorOfBackground('rgba(0, 0, 0, 0.5)')
       .setAnimation('puff')
-      .setShowingDuration(10000)
+      .setShowingDuration(3000)
       .show();
   };
   const onHide = () => {
