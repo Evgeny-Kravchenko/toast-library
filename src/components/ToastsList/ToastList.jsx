@@ -1,7 +1,5 @@
 import React, { Component, createRef } from 'react';
 
-import { DEFAULT_INDENT_Y } from 'src/constants';
-
 import ToastItem from 'src/components/ToastItem';
 import Portal from 'src/components/Portal';
 
@@ -10,7 +8,6 @@ export default class ToastList extends Component {
     super(props);
     this.state = {
       arrayOfToasts: [],
-      defaultIndentY: DEFAULT_INDENT_Y,
       toastsRefs: [],
     };
   }

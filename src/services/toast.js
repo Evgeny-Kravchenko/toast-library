@@ -103,6 +103,9 @@ export default class Toasts {
   onDelete = (id) => {
     const { ref } = this.toastsRefs.find((item) => item.id === id);
     const deletedToast = this.arrayOfToasts.find((item) => item.id === id);
+    if (!deletedToast) {
+      return;
+    }
     const { positionX, positionY } = deletedToast.position;
     const positionOfRemovingVideo = `${positionX}-${positionY}`;
     let indexOfRemovingVideo = null;
