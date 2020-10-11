@@ -1,5 +1,5 @@
 import { createRef } from 'react';
-import animations from '../animations';
+import animations from 'src/animations';
 import {
   DEFAULT_BACKGROUND_COLOR,
   DEFAULT_DESCRIPTION,
@@ -8,9 +8,9 @@ import {
   DEFAULT_POSITION_X,
   DEFAULT_POSITION_Y,
   DEFAULT_TITLE,
-} from '../constants';
-import { defaultThemes } from '../default-themes';
-import { DEFAULT_TEXT_COLOR } from '../default-themes/constants';
+} from 'src/constants';
+import { defaultThemes } from 'src/default-themes';
+import { DEFAULT_TEXT_COLOR } from 'src/default-themes/constants';
 
 export default class Toasts {
   static _instance = null;
@@ -42,10 +42,10 @@ export default class Toasts {
   toastsRefs = [];
 
   lastPositionsOfToastsInTheDifferentPartsOfWindow = {
-    'left-bottom': 5,
-    'left-top': 5,
-    'right-bottom': 5,
-    'right-top': 5,
+    'left-bottom': DEFAULT_INDENT_Y,
+    'left-top': DEFAULT_INDENT_Y,
+    'right-bottom': DEFAULT_INDENT_Y,
+    'right-top': DEFAULT_INDENT_Y,
   };
 
   constructor(refToastContainer) {
@@ -90,6 +90,12 @@ export default class Toasts {
   setIndent(x, y) {
     this.indentX = x;
     this.indentY = y;
+    if (this.arrayOfToasts.length > 0) {
+      return this;
+    }
+    Object.keys(this.lastPositionsOfToastsInTheDifferentPartsOfWindow).forEach((key) => {
+      this.lastPositionsOfToastsInTheDifferentPartsOfWindow[key] = y;
+    });
     return this;
   }
 
@@ -181,7 +187,8 @@ export default class Toasts {
     const position = { positionX, positionY };
     const indents = { indentX, indentY };
     const id = String(Math.round(Math.random() * 10e6));
-    indents.indentY = this._getLastPositionToast(positionX, positionY) || indentY;
+
+    indents.indentY = this._getLastPositionToast(positionX, positionY);
 
     const animation = this.animation || animations.slide;
     const timerId =
@@ -229,11 +236,12 @@ export default class Toasts {
     });
     this.arrayOfToasts = [];
     this.toastsRefs = [];
+    const { indentY } = this;
     this.lastPositionsOfToastsInTheDifferentPartsOfWindow = {
-      'left-bottom': 5,
-      'left-top': 5,
-      'right-bottom': 5,
-      'right-top': 5,
+      'left-bottom': indentY,
+      'left-top': indentY,
+      'right-bottom': indentY,
+      'right-top': indentY,
     };
   }
 }

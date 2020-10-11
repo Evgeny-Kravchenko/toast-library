@@ -17,7 +17,7 @@ export const Sandbox = () => {
       .setDescription(
         'It is very important information and I think it is very important that you know about it.'
       )
-      .setIndent(5, 5)
+      .setIndent(20, 20)
       .setColorOfBackground('rgba(0, 0, 0, 0.5)')
       .setAnimation('puff')
       .setShowingDuration(10000)
@@ -38,7 +38,9 @@ export const Sandbox = () => {
       <button type="button" onClick={() => onShow('right', 'bottom')}>
         Show button 3
       </button>
-      <button onClick={onHide}>Hide all buttons</button>
+      <button type="button" onClick={onHide}>
+        Hide all buttons
+      </button>
     </>
   );
 };
