@@ -12,6 +12,7 @@ export const ToastWrapper = styled.div`
   cursor: pointer;
   opacity: ${(props) => props.opacity};
   user-select: none;
+  overflow: hidden;
 `;
 
 export const ToastHeader = styled.header`
