@@ -19,7 +19,7 @@ export const Sandbox = () => {
       )
       .setIndent(20, 20)
       .setColorOfBackground('rgba(0, 0, 0, 0.5)')
-      .setAnimation('puff')
+      .setAnimation('swing')
       .setShowingDuration(3000)
       .show();
   };
