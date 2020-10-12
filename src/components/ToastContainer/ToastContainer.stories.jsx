@@ -12,7 +12,7 @@ export const Sandbox = () => {
   const onShow = (positionX, positionY) => {
     toastManager
       .setPosition(positionX, positionY)
-      .setType('info')
+      .setType('error')
       .setTitle('It is very important information')
       .setDescription(
         'It is very important information and I think it is very important that you know about it.'

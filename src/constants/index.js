@@ -14,3 +14,5 @@ export const DEFAULT_INDENTS = {
   indentX: DEFAULT_INDENT_X,
   indentY: DEFAULT_INDENT_Y,
 };
+export const INDENT_Y_BETWEEN_TOASTS = 10;
+export const MAX_TOASTS_ON_THE_SCREEN = 3;

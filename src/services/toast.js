@@ -8,6 +8,8 @@ import {
   DEFAULT_POSITION_X,
   DEFAULT_POSITION_Y,
   DEFAULT_TITLE,
+  INDENT_Y_BETWEEN_TOASTS,
+  MAX_TOASTS_ON_THE_SCREEN,
 } from 'src/constants';
 import { defaultThemes } from 'src/default-themes';
 import { DEFAULT_TEXT_COLOR } from 'src/default-themes/constants';
@@ -130,7 +132,7 @@ export default class Toasts {
             ...toast,
             indents: {
               ...toast.indents,
-              indentY: toast.indents.indentY - ref.current.offsetHeight - 10,
+              indentY: toast.indents.indentY - ref.current.offsetHeight - INDENT_Y_BETWEEN_TOASTS,
             },
           };
         }
@@ -151,10 +153,10 @@ export default class Toasts {
     const { ref } = this.toastsRefs.find((item) => item.id === id);
     if (isDelete) {
       this.lastPositionsOfToastsInTheDifferentPartsOfWindow[`${positionX}-${positionY}`] =
-        lastPosition - ref.current.offsetHeight - 10;
+        lastPosition - ref.current.offsetHeight - INDENT_Y_BETWEEN_TOASTS;
     } else {
       this.lastPositionsOfToastsInTheDifferentPartsOfWindow[`${positionX}-${positionY}`] =
-        lastPosition + ref.current.offsetHeight + 10;
+        lastPosition + ref.current.offsetHeight + INDENT_Y_BETWEEN_TOASTS;
     }
   };
 
@@ -181,7 +183,7 @@ export default class Toasts {
       backgroundColor = (type && defaultThemes[type].backgroundColor) || DEFAULT_BACKGROUND_COLOR,
     } = this;
     const color = (type && defaultThemes[type].color) || DEFAULT_TEXT_COLOR;
-    if (arrayOfToasts.length >= 3) {
+    if (arrayOfToasts.length >= MAX_TOASTS_ON_THE_SCREEN) {
       return;
     }
     const position = { positionX, positionY };

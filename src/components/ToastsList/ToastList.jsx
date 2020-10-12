@@ -71,7 +71,6 @@ export default class ToastList extends Component {
       <Portal key={toast.id}>
         <ToastItem
           toast={toast}
-          onAnimationEnd={this.onAnimationEnd}
           onHide={this.hide}
           defaultIndentX={defaultIndentX}
           ref={toastsRefs[idx].ref}

@@ -13,7 +13,7 @@ import {
 } from './styled-components';
 
 const ToastItem = forwardRef((props, ref) => {
-  const { onHide, defaultIndentX, setIsFadeForOneToasts } = props;
+  const { onHide, defaultIndentX, setIsFadeForOneToasts, toast } = props;
   const {
     animation,
     color,
@@ -26,7 +26,7 @@ const ToastItem = forwardRef((props, ref) => {
     id,
     isFade,
     showingDuration,
-  } = props.toast;
+  } = toast;
   const { positionX } = position;
 
   const [opacity, setOpacity] = useState('1');
@@ -133,9 +133,9 @@ const ToastItem = forwardRef((props, ref) => {
           </svg>
         </CloseButton>
       </ToastHeader>
-      <ToastBody>
+      <ToastBody showingDuration={showingDuration}>
         <ImageType color={color} type={type} />
-        <ToastDescription showingDuration={showingDuration}>{description}</ToastDescription>
+        <ToastDescription>{description}</ToastDescription>
       </ToastBody>
       {showingDuration && <ProgressBar showingDuration={showingDuration} />}
     </ToastWrapper>

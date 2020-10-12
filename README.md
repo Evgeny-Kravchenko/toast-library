@@ -1,6 +1,6 @@
 # toast-library
 
-Version 1.2.3
+Version 1.2.4
 
 - fix the way of animation implementation of progress bar
 
