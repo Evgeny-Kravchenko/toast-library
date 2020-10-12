@@ -1,8 +1,8 @@
 # toast-library
 
-Version 1.2.2
+Version 1.2.3
 
-- fix bugs of stacking of toasts after removing several of them in the different corners
+- fix the way of animation implementation of progress bar
 
 This is a toast library. You can easily create notifications using this library.
 
